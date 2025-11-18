@@ -1,1 +1,52 @@
-/bin/
+##############################
+# Java
+##############################
+*.class
+*.jar
+*.war
+*.ear
+*.log
+
+##############################
+# IDE Files
+##############################
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# VS Code
+.vscode/
+
+##############################
+# Build Tools
+##############################
+
+# Maven
+target/
+
+# Gradle
+.gradle/
+build/
+
+
+
+##############################
+# JavaFX Libraries 
+##############################
+# If you have JavaFX downloaded manually
+lib/
+javafx-sdk*/
+javafx-jmods*/
+
+##############################
+# Other
+##############################
+logs/
