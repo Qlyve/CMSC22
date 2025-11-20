@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="application.controller.SignInController"
+            prefWidth="900" prefHeight="600">
+
+    <center>
+        <StackPane>
+            <VBox alignment="CENTER">
+                <VBox spacing="20" alignment="CENTER"
+                      styleClass="card">
+
+                    
+                    <Label text="Sign in" styleClass="title"/>
+
+                   
+                    <VBox spacing="10" styleClass="form">
+
+                        <Label text="EMAIL:" styleClass="lbl"/>
+                        <TextField fx:id="emailField" styleClass="input"/>
+
+                        <Label text="PASSWORD:" styleClass="lbl"/>
+                        <PasswordField fx:id="passwordField" styleClass="input"/>
+
+                        <HBox spacing="6" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="showPasswordCheck" text="show"/>
+                            <Pane HBox.hgrow="ALWAYS"/>
+                            <Hyperlink text="Forgot your password?"/>
+                        </HBox>
+
+                        
+                        <Button text="SIGN" styleClass="sign-btn" onAction="#handleSignIn"/>
+                    </VBox>
+
+                    
+                    <HBox alignment="CENTER">
+                        <Label text="New user?"/>
+                        <Hyperlink fx:id="createAccountLink" text="Create an account" />
+                    </HBox>
+
+                </VBox>
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

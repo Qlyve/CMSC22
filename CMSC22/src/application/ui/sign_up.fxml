@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="application.controller.SignUpController"
+            prefWidth="900" prefHeight="600">
+
+    <left>
+        <Pane prefWidth="450" style="-fx-background-color: linear-gradient(to right, #6fa0dd, #b9cbea);" />
+    </left>
+
+    <center>
+        <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #ffffff;">
+        	<padding>
+        		<Insets top="20" right="20" bottom="20" left="20"/>
+        	</padding>
+        	
+        	<VBox spacing="8" style="-fx-padding: 10 40;">
+            	<Label text="SIGN UP" style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+            	<Label text="Create a new account" style="-fx-text-fill: #555;" />
+
+           
+                <Label text="EMAIL:" />
+                <TextField fx:id="emailField" />
+
+                <Label text="FIRST NAME:" />
+                <TextField fx:id="firstNameField" />
+
+                <Label text="MIDDLE NAME:" />
+                <TextField fx:id="middleNameField" />
+
+                <Label text="LAST NAME:" />
+                <TextField fx:id="lastNameField" />
+
+                <Label text="CATEGORY:" />
+                <TextField fx:id="categoryField" />
+
+                <Label text="PASSWORD:" />
+                <PasswordField fx:id="passwordField" />
+
+                <Label text="CONFIRM PASSWORD:" />
+                <PasswordField fx:id="confirmPasswordField" />
+
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <CheckBox fx:id="showPasswordCheck" />
+                    <Label text="Show Password" />
+                </HBox>
+
+                <Button text="SIGN IN"
+                        style="-fx-background-color: #1f2d3d; -fx-text-fill: white; -fx-padding: 10 0; -fx-font-weight: bold;"
+                        maxWidth="Infinity" />
+
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>
