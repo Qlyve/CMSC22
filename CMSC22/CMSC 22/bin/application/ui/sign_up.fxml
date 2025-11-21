@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600" prefWidth="900" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.SignUpController">
+
+    <left>
+        <Pane prefWidth="450" style="-fx-background-color: linear-gradient(to right, #6fa0dd, #b9cbea);" />
+    </left>
+
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="15" style="-fx-background-color: #ffffff;">
+        	<padding>
+        		<Insets bottom="20" left="20" right="20" top="20" />
+        	</padding>
+        	
+           	<VBox spacing="8" style="-fx-padding: 10 40;">
+            	<Label style="-fx-font-size: 26px; -fx-font-weight: bold;" text="SIGN UP" />
+            	<Label style="-fx-text-fill: #555;" text="Create a new account" />
+
+              
+                   <Label text="EMAIL:" />
+                <TextField fx:id="emailField" />
+
+                   <Label text="FIRST NAME:" />
+                <TextField fx:id="firstNameField" />
+
+                   <Label text="MIDDLE NAME:" />
+                <TextField fx:id="middleNameField" />
+
+                   <Label text="LAST NAME:" />
+                <TextField fx:id="lastNameField" />
+
+                   <Label text="CATEGORY:" />
+                <TextField fx:id="categoryField" />
+
+                   <Label text="PASSWORD:" />
+                <PasswordField fx:id="passwordField" />
+
+                   <Label text="CONFIRM PASSWORD:" />
+                <PasswordField fx:id="confirmPasswordField" />
+
+                   <HBox alignment="CENTER_LEFT" spacing="6">
+                    <CheckBox fx:id="showPasswordCheck" />
+                    <Label text="Show Password" />
+                </HBox>
+
+                   <Button maxWidth="Infinity" onAction="#handleSignUp" prefHeight="38.0" prefWidth="163.0" style="-fx-background-color: #1f2d3d; -fx-text-fill: white; -fx-padding: 10 0; -fx-font-weight: bold;" text="SIGN UP" />
+
+               </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>
