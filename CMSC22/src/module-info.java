@@ -1,4 +1,4 @@
-module CMSC22_fixed {
+module CMSC22 {
     requires javafx.controls;
     requires javafx.fxml;
 

@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import uiandlogic.*;
 
 public class SignInController {
 
@@ -20,6 +21,8 @@ public class SignInController {
 
     @FXML
     private Hyperlink createAccountLink;
+    
+    private DataAccess dataAccess;
 
  
     @FXML
@@ -29,9 +32,22 @@ public class SignInController {
 
     @FXML
     private void handleSignIn() {
-        System.out.println("Email: " + emailField.getText());
-        System.out.println("Password: " + passwordField.getText());
+        String email = emailField.getText();
+        String password = passwordField.getText();
+
+        DataAccess dataAccess = DataAccess.getInstance(); 
+        Login loginSystem = new Login(dataAccess);
+        User authenticatedUser = loginSystem.authenticate(email, password);
+
+        if (authenticatedUser != null) {
+            openDashboard(authenticatedUser);
+        } else {
+            // Show error
+        }
     }
+    
+
+
 
     private void openSignUp() {
         try {
@@ -46,4 +62,5 @@ public class SignInController {
             e.printStackTrace();
         }
     }
+    
 }

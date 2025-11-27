@@ -17,7 +17,7 @@ public class DataAccess {
 	
 	// class is mainly for creation reading updating and deleting basically modifying ng stuff.
 	// users pa lang to for reading and writing need dito ng pagread din sa csv and such 
-	
+	private static DataAccess instance;
 	// paths
 	private static final Path USER_PATH = Paths.get("src/data/users.txt");
 	private static final Path SECTIONS_PATH = Paths.get("src/data/course_offerings.csv");
@@ -240,6 +240,15 @@ public class DataAccess {
 			}
 		}
 	}
+	
+
+    
+    public static DataAccess getInstance() {
+        if (instance == null) {
+            instance = new DataAccess();
+        }
+        return instance;
+    }
 	
 		
 }

@@ -16,11 +16,11 @@
 
     <center>
         <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #ffffff;">
-        	<padding>
-        		<Insets top="20" right="20" bottom="20" left="20"/>
-        	</padding>
-        	
         	<VBox spacing="8" style="-fx-padding: 10 40;">
+                <VBox.margin>
+                    <Insets top="20" bottom="0" left="0" right="0" />
+                </VBox.margin>
+                
             	<Label text="SIGN UP" style="-fx-font-size: 26px; -fx-font-weight: bold;" />
             	<Label text="Create a new account" style="-fx-text-fill: #555;" />
 
@@ -38,7 +38,7 @@
                 <TextField fx:id="lastNameField" />
 
                 <Label text="CATEGORY:" />
-                <TextField fx:id="categoryField" />
+                <TextField fx:id="categoryField" /> 
 
                 <Label text="PASSWORD:" />
                 <PasswordField fx:id="passwordField" />
@@ -50,13 +50,18 @@
                     <CheckBox fx:id="showPasswordCheck" />
                     <Label text="Show Password" />
                 </HBox>
-
-                <Button text="SIGN IN"
-                        style="-fx-background-color: #1f2d3d; -fx-text-fill: white; -fx-padding: 10 0; -fx-font-weight: bold;"
-                        maxWidth="Infinity" />
-
             </VBox>
-        </VBox>
+            
+            <Button text="SIGN UP"
+                    style="-fx-background-color: #1f2d3d; -fx-text-fill: white; -fx-padding: 10 0; -fx-font-weight: bold;"
+                    maxWidth="Infinity" >
+                
+                <VBox.margin>
+                    <Insets left="20" right="20" bottom="20"/>
+                </VBox.margin>
+            </Button>
+            
+            </VBox>
     </center>
 
 </BorderPane>
