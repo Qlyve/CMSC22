@@ -1,4 +1,4 @@
-package main;
+package uiandlogic;
 
 public class Section {
 	private String courseCode;

@@ -12,9 +12,9 @@ public class User {
     private final String password;
 
     // constructor
-    public User(String username, String emailAddress, String firstName,
+	public User(/* String username, */String emailAddress, String firstName,
                 String middleName, String lastName, String userType, String password) {
-        this.username = username;
+        this.username = firstName; // set the firstName as the username since username was not asked during account creation
         this.emailAddress = emailAddress;
         this.firstName = firstName;
         this.middleName = middleName;

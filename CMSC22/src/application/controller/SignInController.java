@@ -1,12 +1,9 @@
 package application.controller;
 
+import application.SceneManager;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import uiandlogic.*;
+import uiandlogic.User;
 
 public class SignInController {
 
@@ -21,8 +18,6 @@ public class SignInController {
 
     @FXML
     private Hyperlink createAccountLink;
-    
-    private DataAccess dataAccess;
 
  
     @FXML
@@ -32,25 +27,23 @@ public class SignInController {
 
     @FXML
     private void handleSignIn() {
-        String email = emailField.getText();
-        String password = passwordField.getText();
-
-        DataAccess dataAccess = DataAccess.getInstance(); 
-        Login loginSystem = new Login(dataAccess);
-        User authenticatedUser = loginSystem.authenticate(email, password);
-
-        if (authenticatedUser != null) {
-            openDashboard(authenticatedUser);
-        } else {
-            // Show error
+        System.out.println("Email: " + emailField.getText());
+        System.out.println("Password: " + passwordField.getText());
+        
+        for (User user:  SceneManager.getDataAccess().getUsers()) {
+        	if(user.getEmailAddress().equals(emailField.getText()) 
+        			&& user.getPassword().equals(passwordField.getText())) {
+        		SceneManager.switchTo("/application/ui/dashboard.fxml");
+        		return;
+        	}
         }
+        // dito nalang siguro yung pag show ng red mark sa scene
+        System.out.println("Wrong email or password");       
     }
     
-
-
-
+    // changed logic of scene switching for simpler logic
     private void openSignUp() {
-        try {
+        /*try {
             Parent root = FXMLLoader.load(
                     getClass().getResource("/application/ui/sign_up.fxml")
             );
@@ -60,7 +53,7 @@ public class SignInController {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+        SceneManager.switchTo("/application/ui/sign_up.fxml");
     }
-    
 }

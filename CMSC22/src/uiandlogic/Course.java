@@ -1,4 +1,4 @@
-package main;
+package uiandlogic;
 
 import java.util.ArrayList;
 
