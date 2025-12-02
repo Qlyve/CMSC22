@@ -4,8 +4,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import scenes.BaseScene;
 import uiandlogic.DataAccess;
 import uiandlogic.User;
+import scenes.BaseScene;
 
 // This is a static class that manages every scene changes as well as updating all the data of the program
 public class SceneManager {
@@ -19,6 +21,7 @@ public class SceneManager {
         primaryStage = stage;
     }
     
+    
     // update currently signed in user
     public static void setUser(User user) {
         currentUser = user;
@@ -27,6 +30,10 @@ public class SceneManager {
     // signed in user for current session (for displaying later)
     public static User getUser() {
         return currentUser;
+    }
+    
+    public static Stage getStage() {
+        return primaryStage;
     }
     
     // to be able to access DataAccess through this class
@@ -52,5 +59,17 @@ public class SceneManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    // method overloading for switching scenes WITH baseScene as parameter instead of fxml
+    public static void switchTo(BaseScene baseScene) {
+        if (primaryStage == null) {
+            throw new IllegalStateException("SceneManager was not initialized.");
+        }
+        
+        Scene scene = baseScene.createScene();
+        primaryStage.setWidth(1024);
+        primaryStage.setHeight(768);
+        primaryStage.setScene(scene);
     }
 }
