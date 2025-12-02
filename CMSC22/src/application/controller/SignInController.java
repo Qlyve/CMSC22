@@ -19,7 +19,9 @@ public class SignInController {
     @FXML
     private Hyperlink createAccountLink;
 
- 
+    @FXML
+    private Hyperlink forgotPasswordLink;
+    
     @FXML
     private void initialize() {
         createAccountLink.setOnAction(event -> openSignUp());
@@ -56,4 +58,11 @@ public class SignInController {
         }*/
         SceneManager.switchTo("/application/ui/sign_up.fxml");
     }
+    
+    @FXML
+    private void openForgotPassword() {
+    	SceneManager.switchTo("/application/ui/forgot_password.fxml");
+    }
 }
+
+	

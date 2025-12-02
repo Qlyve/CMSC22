@@ -34,7 +34,7 @@
                         <HBox alignment="CENTER_LEFT" spacing="6">
                             <CheckBox fx:id="showPasswordCheck" text="show" />
                             <Pane HBox.hgrow="ALWAYS" />
-                            <Hyperlink text="Forgot your password?" />
+                            <Hyperlink fx:id="forgotPasswordLink" text="Forgot your password?" onAction="#openForgotPassword"/>
                         </HBox>
 
                         
