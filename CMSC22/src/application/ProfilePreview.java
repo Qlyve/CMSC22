@@ -6,8 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ProfilePreview extends Application { // FIX: Must extend Application
-	@Override // FIX: Must override the start method
+public class ProfilePreview extends Application { 
+	@Override 
 	public void start(Stage primaryStage) {
         try {
             // Ensure this path is correct: /application/ui/profile.fxml
@@ -15,7 +15,7 @@ public class ProfilePreview extends Application { // FIX: Must extend Applicatio
                 getClass().getResource("/application/ui/profile.fxml")
             );
 
-            Scene scene = new Scene(root, 900, 600); // Using the FXML defined size
+            Scene scene = new Scene(root, 900, 600); 
 
             primaryStage.setTitle("Profile Preview");
             primaryStage.setScene(scene);
@@ -27,6 +27,6 @@ public class ProfilePreview extends Application { // FIX: Must extend Applicatio
     }
 
     public static void main(String[] args) {
-        launch(args); // FIX: Must call Application.launch(args)
+        launch(args); 
     }
 }
