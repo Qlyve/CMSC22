@@ -10,7 +10,6 @@ import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
@@ -45,7 +44,7 @@ public class CourseCatalogScene extends BaseScene {
         	masterList.addAll(list);
         }
         
-        // main container
+     // main container
     	HBox mainContainer = new HBox();
         // create and add the sidebar
         Sidebar sidebar = new Sidebar(scale, "CourseCatalog", currentUser);
@@ -70,91 +69,47 @@ public class CourseCatalogScene extends BaseScene {
         
         // title container 
         HBox titleContainer = new HBox();
+//        titleContainer.setStyle("-fx-border-color: #222222; -fx-border-width: 1px;");
         Label title = new Label("Course Catalog");
         title.setStyle("-fx-font-size: 24px; -fx-text-fill: #222222; -fx-font-weight: bold;");
         HBox.setHgrow(titleContainer, Priority.ALWAYS);
         titleContainer.getChildren().addAll(title);
         
-        // line design
+        
         Separator separator = new Separator();
         separator.setPrefWidth(Double.MAX_VALUE);
         separator.setStyle("-fx-background-color: #222222;");
         
-        // create a filtered list for searching later
+        // create a filteredlist for searching later
         FilteredList<Course> filteredList = new FilteredList<>(masterList, p -> true);
         TextField searchField = new TextField();
         searchField.setPromptText("Search");
         searchField.setMaxWidth(302 * scale);
-        
-        ComboBox<String> degreeFilter = new ComboBox<>();
-        degreeFilter.getItems().add("All");
-        for(Course course : masterList) {
-            String degree = course.getTypeDegree();
-            if(!degreeFilter.getItems().contains(degree)) {
-                degreeFilter.getItems().add(degree);
-            }
-        }
-        degreeFilter.setValue("All");
-        degreeFilter.setPrefWidth(200 * scale);
-        
-        // put search and dropdown together
-        HBox filterContainer = new HBox(10);
-        filterContainer.getChildren().addAll(searchField, degreeFilter);
 
 
         // searching function
         searchField.textProperty().addListener((obs, oldVal, newVal) -> {
             filteredList.setPredicate(course -> {
-                // check dropdown filter
-                String selectedDegree = degreeFilter.getValue();
-                if(selectedDegree != null && !selectedDegree.equals("All")) {
-                    if(!course.getTypeDegree().equals(selectedDegree)) {
-                        return false;
-                    }
-                }
-                
-                // Check search text
                 if (newVal == null || newVal.isEmpty()) return true;
                 String lower = newVal.toLowerCase();
 
                 return course.getCourseCode().toLowerCase().contains(lower)
-                    || course.getCourseName().toLowerCase().contains(lower);
+                    || course.getCourseName().toLowerCase().contains(lower)
+                    || course.getUnits().toLowerCase().contains(lower)
+                    || course.getDescription().toLowerCase().contains(lower);
             });
         });
-        
-        // for drop down
-        degreeFilter.valueProperty().addListener((obs, oldVal, newVal) -> {
-            filteredList.setPredicate(course -> {
-                // check dropdown filter
-                if(newVal != null && !newVal.equals("All")) {
-                    if(!course.getTypeDegree().equals(newVal)) {
-                        return false;
-                    }
-                }
-                
-                // Check search text
-                String searchText = searchField.getText();
-                if (searchText == null || searchText.isEmpty()) return true;
-                String lower = searchText.toLowerCase();
-
-                return course.getCourseCode().toLowerCase().contains(lower)
-                    || course.getCourseName().toLowerCase().contains(lower);
-            });
-        });
-        
 
         // table
         TableView<Course> tableView = new TableView<>();
         tableView.setPrefHeight(879 * scale);
         tableView.setFixedCellSize(110 * scale);
         tableView.setItems(masterList);
-        TableColumn<Course, String> degCol = new TableColumn<>("Type/Degree");
         TableColumn<Course, String> codeCol = new TableColumn<>("Course Code");
         TableColumn<Course, String> nameCol = new TableColumn<>("Course Title");
         TableColumn<Course, String> unitsCol = new TableColumn<>("Units");
         TableColumn<Course, String> descCol = new TableColumn<>("Description");
 
-        degCol.setCellValueFactory(new PropertyValueFactory<>("typeDegree"));
         codeCol.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("courseName"));
         unitsCol.setCellValueFactory(new PropertyValueFactory<>("units"));
@@ -182,7 +137,7 @@ public class CourseCatalogScene extends BaseScene {
             }
         });
         
-        // for text wrapping in description col
+        // for text wrapping in desc col
         descCol.setCellFactory(col -> new TableCell<Course, String>() {
             private final Label label = new Label();
             {
@@ -204,20 +159,19 @@ public class CourseCatalogScene extends BaseScene {
             }
         });
         
-        tableView.getColumns().addAll(degCol, codeCol, nameCol, unitsCol, descCol);
+        tableView.getColumns().addAll(codeCol, nameCol, unitsCol, descCol);
 
         SortedList<Course> sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(tableView.comparatorProperty());
         tableView.setItems(sortedList);	
         
-        // add the nodes to create the layout
-        layout.getChildren().addAll(titleContainer, separator,  filterContainer, tableView);
+        // add the nodes to respective roots to create the layout
+        layout.getChildren().addAll(titleContainer, separator,  searchField, tableView);
         contentArea.getChildren().add(layout);
         backgroundArea.getChildren().addAll(contentArea);
         mainContainer.getChildren().addAll(sidebar.getSidebar(), backgroundArea);
         
         return mainContainer;
     }
-    
     // METHODS AND FUNCTIONS
 }

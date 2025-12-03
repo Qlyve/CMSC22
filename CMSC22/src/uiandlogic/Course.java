@@ -7,15 +7,15 @@ public class Course {
 	private String courseName;
 	private String units;
 	private String description;
-	private String typeDegree;
 	private ArrayList<Section> sections;
 	
-	public Course(String CC, String CN, String units, String description, String degree) {
+
+	
+	public Course(String CC, String CN, String units, String description) {
 		this.courseCode = CC;
 		this.courseName = CN;
 		this.units = units;
 		this.description = description;
-		this.typeDegree = degree;
 		this.sections = new ArrayList<Section>() ; 
 	}
 	
@@ -24,7 +24,6 @@ public class Course {
 	public String getCourseName()			{return courseName;}
 	public String getUnits()					{return units;}
 	public String getDescription()			{return description;}
-	public String getTypeDegree()			{return typeDegree;}
 	public ArrayList<Section> getSection()	{return sections;}
 	
 	protected void addSection(Section newSection) {

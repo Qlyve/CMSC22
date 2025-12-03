@@ -8,6 +8,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import uiandlogic.User;
 
 public class Sidebar {
@@ -43,12 +45,12 @@ public class Sidebar {
         titleContainer.getChildren().add(title);
 
         // buttons
-        Button profileButton = createSidebarButton("Profile");
-        Button homeButton = createSidebarButton("Home");
-        Button CCButton = createSidebarButton("Course Catalog");
-        Button plannerButton = createSidebarButton("Planner");
-        Button aboutUsButton = createSidebarButton("About us");
-        Button signOutButton = createSidebarButton("Sign out");
+        Button profileButton = createSidebarButton("Profile", "/icons/profile_icon.png");
+        Button homeButton = createSidebarButton("Home", "/icons/home_icon.png");
+        Button CCButton = createSidebarButton("Course Catalog", "/icons/course_catalog_icon.png");
+        Button plannerButton = createSidebarButton("Planner", "/icons/planner_icon.png");
+        Button aboutUsButton = createSidebarButton("About us", "/icons/about_us_icon.png");
+        Button signOutButton = createSidebarButton("Sign out", "/icons/sign_out_icon.png");
 
         // button actions
         profileButton.setOnAction(e -> navigateTo("Profile"));
@@ -81,8 +83,22 @@ public class Sidebar {
         );
     }
     
-    private Button createSidebarButton(String text) {
-        Button button = new Button(text);
+    private Button createSidebarButton(String text, String iconPath) {
+    	ImageView icon = new ImageView(new Image(getClass().getResourceAsStream(iconPath)));
+        icon.setFitWidth(27);
+        icon.setFitHeight(27);
+
+        // Create label
+        Label label = new Label(text);
+        label.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+
+        // Put icon + label in HBox
+        HBox content = new HBox(10, icon, label);
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setPrefWidth(260 * scale); 
+        
+    	Button button = new Button();
+        button.setGraphic(content);
         button.setPrefWidth(302 * scale);
         button.setPrefHeight(56.12 * scale);
         button.setAlignment(Pos.CENTER);

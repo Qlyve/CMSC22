@@ -107,7 +107,7 @@ public class HomeScene extends BaseScene {
 
         // Final composition
         mainContainer.getChildren().addAll(sidebar.getSidebar(), contentArea);
-
+        System.out.println("Pressed Home! Switching");
         return mainContainer;
     }
 }

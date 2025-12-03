@@ -60,6 +60,7 @@ public class DataAccess {
 	public ObservableList<User> getUsers(){
 		return userList;
 	}
+	
 	// helper method to parse CSV line since description has commmas
 	private String[] parseCSVLine(String line) {
 		List<String> result = new ArrayList<>();
@@ -85,7 +86,6 @@ public class DataAccess {
 	// load courses
 	private void loadCourses() {
 		int i = 0;
-		String degree = null;
 		BufferedReader reader = null;
 		try {
 	      	for(Path path : coursePaths) {
@@ -95,30 +95,15 @@ public class DataAccess {
 	      		
 	      		// loops through the end of file
 	      		while(line != null) {
+//	      			String[] attributes = line.split(",");
 	      			String[] attributes = parseCSVLine(line);
-	      			
-  					switch(i) {
-  					case 0:
-  						degree = "CMSC";
-  						break;
-  					case 1:
-  						degree = "MIT";
-  						break;
-  					case 2:
-  						degree = "MSCS";
-  						break;
-  					case 3:
-  						degree = "PHD";
-  						break;
-  					}
 	      			
 	      			// create the course
 	      			Course newCourse = new Course(
 	      					attributes[0],
 	      					attributes[1], 
 	      					attributes[2],
-	      					attributes[3],
-	      					degree
+	      					attributes[3] 
 	      					);
 
 	      			
