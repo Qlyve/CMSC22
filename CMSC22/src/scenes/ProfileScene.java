@@ -44,4 +44,5 @@ public class ProfileScene extends BaseScene {
         
         return mainContainer;
     }
+    // METHODS AND FUNCTIONS
 }
