@@ -10,7 +10,6 @@ public class ProfilePreview extends Application {
 	@Override 
 	public void start(Stage primaryStage) {
         try {
-            // Ensure this path is correct: /application/ui/profile.fxml
             Parent root = FXMLLoader.load(
                 getClass().getResource("/application/ui/profile.fxml")
             );
