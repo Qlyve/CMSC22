@@ -48,7 +48,7 @@ public class HomeScene extends BaseScene {
             new BackgroundFill(Color.web("#f5f5f5"), new CornerRadii(10), Insets.EMPTY)
         ));
 
-        Label greetingLabel = new Label("Good day, " + currentUser.getFirstName() + "!");
+        Label greetingLabel = new Label("Goood day, " + currentUser.getFirstName() + "!");
         greetingLabel.setStyle("-fx-font-size: 26px; -fx-font-weight: bold;");
         
         Label descriptionLabel = new Label("Welcome to *website name*! This is a website that assists students with course registration plan.\n" +

@@ -144,7 +144,7 @@ public class Sidebar {
             case "CourseCatalog":
             	System.out.println("Pressed Course Catalog! Switching");
                 SceneManager.switchTo(new CourseCatalogScene(currentUser));
-                break;
+                 break;
             case "Planner":
             	System.out.println("Pressed Planner! Switching");
                 SceneManager.switchTo(new PlannerScene(currentUser));
