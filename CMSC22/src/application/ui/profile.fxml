@@ -11,11 +11,11 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.ProfileController">
-   <!-- Left Sidebar Navigation -->
+  
    <left>
       <VBox prefWidth="200.0" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
          <children>
-            <!-- App Title/Logo Section -->
+            
             <HBox alignment="CENTER_LEFT" prefHeight="80.0" style="-fx-border-color: #34495e; -fx-border-width: 0 0 1 0;">
                <children>
                   <Label text="ICS" textFill="WHITE">
@@ -29,13 +29,13 @@
                </padding>
             </HBox>
             
-            <!-- Navigation Links -->
+            
             <VBox spacing="5.0" VBox.vgrow="ALWAYS">
-               <!-- Profile (Active Link) -->
+               
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="40.0" style="-fx-background-color: #34495e;">
                      <children>
-                        <!-- Using text as icon placeholder, typically an ImageView or FontIcon would be used -->
+                        
                         <Label text="👤" textFill="WHITE">
                            <HBox.margin>
                               <Insets right="10.0" />
@@ -51,7 +51,7 @@
                         <Insets left="20.0" />
                      </padding>
                   </HBox>
-                  <!-- Home -->
+                 
                   <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="40.0" styleClass="nav-item">
                      <children>
                         <Label text="🏠" textFill="#95a5a6">
@@ -69,7 +69,7 @@
                         <Insets left="20.0" />
                      </padding>
                   </HBox>
-                  <!-- Course Catalog -->
+                
                   <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="50.0" prefHeight="40.0" styleClass="nav-item">
                      <children>
                         <Label text="🗃️" textFill="#95a5a6">
@@ -87,7 +87,7 @@
                         <Insets left="20.0" />
                      </padding>
                   </HBox>
-                  <!-- Planner -->
+                 
                   <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="90.0" prefHeight="40.0" styleClass="nav-item">
                      <children>
                         <Label text="🗓️" textFill="#95a5a6">
@@ -105,7 +105,7 @@
                         <Insets left="20.0" />
                      </padding>
                   </HBox>
-                  <!-- About us -->
+                 
                   <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="130.0" prefHeight="40.0" styleClass="nav-item">
                      <children>
                         <Label text="❓" textFill="#95a5a6">
@@ -129,7 +129,7 @@
                </VBox.margin>
             </VBox>
             
-            <!-- Sign Out Button -->
+           
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" styleClass="nav-item">
                <children>
                   <Label text="➡️" textFill="#95a5a6">
@@ -154,11 +154,11 @@
       </VBox>
    </left>
    
-   <!-- Center Content Area -->
+
    <center>
       <VBox style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER">
          <children>
-            <!-- Profile Information Card -->
+           
             <VBox prefWidth="700.0" style="-fx-background-color: WHITE; -fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;">
                <children>
                   <Label text="Profile Information">
@@ -170,7 +170,7 @@
                      </VBox.margin>
                   </Label>
                   
-                  <!-- Profile Details Grid -->
+                
                   <GridPane hgap="40.0" vgap="15.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -182,11 +182,11 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      
-                     <!-- Row 1: Names -->
+                 
                      <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
                         <children>
                            <Label style="-fx-font-weight: bold;" text="First Name:" />
-                           <Label text="USER USER USER USER" />
+                           <Label text="USER USER USER USER" />     <!-- placeholder only, should be changed -->
                         </children>
                      </VBox>
                      <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
@@ -198,21 +198,20 @@
                      <VBox GridPane.columnIndex="2" GridPane.rowIndex="0">
                         <children>
                            <Label style="-fx-font-weight: bold;" text="Last Name:" />
-                           <Label text="USER USER USER" />
+                           <Label text="USER USER USER" /> <!-- placeholder only, should be changed -->
                         </children>
                      </VBox>
                      
-                     <!-- Row 2: Email and User Type -->
                      <VBox GridPane.columnIndex="0" GridPane.rowIndex="1">
                         <children>
                            <Label style="-fx-font-weight: bold;" text="Email Address:" />
-                           <Label text="USER USER USER USER" />
+                           <Label text="USER USER USER USER" /> <!-- placeholder only, should be changed -->
                         </children>
                      </VBox>
                      <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <children>
                            <Label style="-fx-font-weight: bold;" text="User Type:" />
-                           <Label text="Admin | MSCS | CMSC" />
+                           <Label text="Admin | MSCS | CMSC" /> <!-- placeholder only, should be changed -->
                         </children>
                      </VBox>
                      
