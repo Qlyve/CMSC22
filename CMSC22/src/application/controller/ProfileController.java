@@ -7,7 +7,7 @@ import uiandlogic.User;
 import javafx.scene.control.Button;
 
 public class ProfileController {
-	// FXML elements to display user data
+	// elements to display user data
     @FXML private Label firstNameLabel;
     @FXML private Label middleNameLabel;
     @FXML private Label lastNameLabel;
@@ -20,11 +20,9 @@ public class ProfileController {
     @FXML private Button plannerBtn;
     @FXML private Button aboutBtn;
 
-
-    // Initializes the controller after its root element has been completely processed.
     @FXML
     public void initialize() {
-        // Load the current user data and populate the labels
+        // load the current user data and populate the labels
         User currentUser = SceneManager.getUser();
 
         if (currentUser != null) {
@@ -36,14 +34,11 @@ public class ProfileController {
             emailLabel.setText(currentUser.getEmailAddress());
             userTypeLabel.setText(currentUser.getUserType());
         } else {
-            // Handle case where no user is logged in (e.g., set placeholders or log error)
-            System.err.println("No user currently logged in to display profile.");
-            // For preview, we can manually set a dummy user if needed, but in the real app,
-            // this indicates a navigation error.
+            System.out.println("No user currently logged in to display profile.");
         }
     }
 
-    // Navigation handlers
+    //navigation handlers
     @FXML
     private void showDashboard() {
         SceneManager.switchTo("/application/ui/dashboard.fxml");
@@ -51,7 +46,6 @@ public class ProfileController {
 
     @FXML
     private void showProfile() {
-        // Already on the profile page
     }
 
     @FXML
