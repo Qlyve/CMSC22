@@ -15,7 +15,7 @@ public class Main extends Application {
         	DataAccess dataAccess = new DataAccess();
         	
         	// this line sets the data access for the current session which 
-        	// lets the program edit the data base just by calling SceneManager 
+        	// lets the program edit the d ata base just by calling SceneManager 
         	// (and access all methods inside DataAccess)
         	SceneManager.setDataAccess(dataAccess); 
         	

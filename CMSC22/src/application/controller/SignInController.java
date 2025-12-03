@@ -37,6 +37,7 @@ public class SignInController {
         	if(user.getEmailAddress().equals(emailField.getText()) 
         			&& user.getPassword().equals(passwordField.getText())) {
         		SceneManager.switchTo(new HomeScene(user));
+//				change to new Javascene instead of the fxml
 //        		SceneManager.switchTo("/application/ui/dashboard");
         		return;
         	}

@@ -28,13 +28,13 @@ public class DataAccess {
 	
 	// lists
 	private ObservableList<Course> CMSCCourses = FXCollections.observableArrayList();
-//	private ObservableList<Course> MSCSCourses = FXCollections.observableArrayList();
+	private ObservableList<Course> MSCSCourses = FXCollections.observableArrayList();
 	private ObservableList<Course> MITCourses  = FXCollections.observableArrayList();
 	private ObservableList<Course> PHDCourses  = FXCollections.observableArrayList();
 	
 	private ArrayList<Path> coursePaths = new ArrayList<Path>(Arrays.asList(
 			CMSC_COURSES_PATH,
-//			MSCS_COURSES_PATH, 
+			MSCS_COURSES_PATH, 
 			MIT_COURSES_PATH, 
 			PHD_COURSES_PATH
 			));
@@ -42,7 +42,7 @@ public class DataAccess {
 
 	private ArrayList<ObservableList<Course>> allCourseLists = new ArrayList<>(Arrays.asList(
 		    CMSCCourses,
-//		    MSCSCourses,
+		    MSCSCourses,
 		    MITCourses,
 		    PHDCourses
 		));
@@ -105,10 +105,7 @@ public class DataAccess {
 	      					attributes[2],
 	      					attributes[3] 
 	      					);
-//	      			System.out.println(attributes[0]);
-//	      			System.out.println(attributes[1]);
-//	      			System.out.println(attributes[2]);
-//	      			System.out.println(attributes[3]);
+
 	      			
 	      			allCourseLists.get(i).add(newCourse);
 	      			line = reader.readLine();
@@ -228,6 +225,10 @@ public class DataAccess {
 	public void addUser(User newUser) {
 		this.userList.add(newUser);
 		saveUsers();
+	}
+	
+	public ArrayList<ObservableList<Course>> getMasterList(){
+		return allCourseLists;
 	}
 		
 	// saves users by reading
