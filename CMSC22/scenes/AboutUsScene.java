@@ -77,7 +77,7 @@ public class AboutUsScene extends BaseScene {
         VBox member4 = createMemberCard(
             "Nino Ferjen C. Ilocto",
             "BS Statistics",
-            "XXXX-XXXXX",
+            "2020-05213",
             "ncilocto@up.edu.ph",
             "Served as project lead, coordinating team meetings and driving development timelines to ensure project milestones were achieved. Designed and implemented the complete authentication interface, crafting the sign-in and sign-up screens with professional styling and user-friendly form validation."
         );
@@ -198,3 +198,4 @@ public class AboutUsScene extends BaseScene {
         return infoBox;
     }
 }
+
