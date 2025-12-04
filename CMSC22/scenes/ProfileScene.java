@@ -28,7 +28,7 @@ public class ProfileScene extends BaseScene {
         
         // create content area
         VBox contentArea = new VBox(20 * scale);
-        contentArea.setPadding(new Insets(30 * scale));
+        contentArea.setPadding(new Insets(40 * scale));
         HBox.setHgrow(contentArea, Priority.ALWAYS);
         
         // profile information container
@@ -88,3 +88,4 @@ public class ProfileScene extends BaseScene {
         return box;
     }
 }
+
