@@ -6,18 +6,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class CourseCatalogPreview extends Application {
-    
-    @Override
-    public void start(Stage primaryStage) {
+public class ProfilePreview extends Application { 
+	@Override 
+	public void start(Stage primaryStage) {
         try {
             Parent root = FXMLLoader.load(
-                getClass().getResource("/application/ui/course_catalog.fxml")
+                getClass().getResource("/application/ui/profile.fxml")
             );
 
-            Scene scene = new Scene(root, 1200, 700);
+            Scene scene = new Scene(root, 900, 600); 
 
-            primaryStage.setTitle("Course Catalog Preview");
+            primaryStage.setTitle("Profile Preview");
             primaryStage.setScene(scene);
             primaryStage.show();
 
@@ -27,6 +26,6 @@ public class CourseCatalogPreview extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        launch(args); 
     }
 }

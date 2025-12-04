@@ -28,13 +28,13 @@ public class DataAccess {
 	
 	// lists
 	private ObservableList<Course> CMSCCourses = FXCollections.observableArrayList();
-//	private ObservableList<Course> MSCSCourses = FXCollections.observableArrayList();
+	private ObservableList<Course> MSCSCourses = FXCollections.observableArrayList();
 	private ObservableList<Course> MITCourses  = FXCollections.observableArrayList();
 	private ObservableList<Course> PHDCourses  = FXCollections.observableArrayList();
 	
 	private ArrayList<Path> coursePaths = new ArrayList<Path>(Arrays.asList(
 			CMSC_COURSES_PATH,
-//			MSCS_COURSES_PATH, 
+			MSCS_COURSES_PATH, 
 			MIT_COURSES_PATH, 
 			PHD_COURSES_PATH
 			));
@@ -42,7 +42,7 @@ public class DataAccess {
 
 	private ArrayList<ObservableList<Course>> allCourseLists = new ArrayList<>(Arrays.asList(
 		    CMSCCourses,
-//		    MSCSCourses,
+		    MSCSCourses,
 		    MITCourses,
 		    PHDCourses
 		));
@@ -105,10 +105,7 @@ public class DataAccess {
 	      					attributes[2],
 	      					attributes[3] 
 	      					);
-//	      			System.out.println(attributes[0]);
-//	      			System.out.println(attributes[1]);
-//	      			System.out.println(attributes[2]);
-//	      			System.out.println(attributes[3]);
+
 	      			
 	      			allCourseLists.get(i).add(newCourse);
 	      			line = reader.readLine();
@@ -229,36 +226,10 @@ public class DataAccess {
 		this.userList.add(newUser);
 		saveUsers();
 	}
-		
-	// saves users by reading
-//	private void saveUsers() {
-//		BufferedWriter writer = null;
-//	 	
-//	 	try {
-//	 		writer = Files.newBufferedWriter(USER_PATH);
-//	 		
-//	 		for(User user : userList) {
-//	 			String middle = user.getMiddleName() == null ? "" : user.getMiddleName(); // create the instance of a middle name even if not present to be empty
-//	 			String line = String.join(",", 
-//	 					user.getUsername(),
-//	 					user.getEmailAddress(),
-//	 					user.getFirstName(),
-//	 					middle,
-//	 					user.getLastName(),
-//	 					user.getUserType(),
-//	 					user.getPassword()
-//	 					);
-//	 				
-//	 			writer.write(line);
-//	 			writer.newLine();
-//	 		}
-//	 			
-//	 		writer.close();
-//	 			
-//	 	} catch (IOException e) {
-//	 		e.printStackTrace();
-//	 	}
-//	}
+	
+	public ArrayList<ObservableList<Course>> getMasterList(){
+		return allCourseLists;
+	}
 	
 	public void viewUsers() {
 		for(User user : userList) {
@@ -274,14 +245,10 @@ public class DataAccess {
 		}
 	}
 	
-
-    
     public static DataAccess getInstance() {
         if (instance == null) {
             instance = new DataAccess();
         }
         return instance;
-    }
-	
-		
+    }	
 }

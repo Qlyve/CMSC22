@@ -3,6 +3,7 @@ package application.controller;
 import application.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import scenes.HomeScene;
 import uiandlogic.User;
 
 public class SignInController {
@@ -35,7 +36,9 @@ public class SignInController {
         for (User user:  SceneManager.getDataAccess().getUsers()) {
         	if(user.getEmailAddress().equals(emailField.getText()) 
         			&& user.getPassword().equals(passwordField.getText())) {
-        		SceneManager.switchTo("/application/ui/dashboard.fxml");
+        		SceneManager.switchTo(new HomeScene(user));
+//				change to new Javascene instead of the fxml
+//        		SceneManager.switchTo("/application/ui/dashboard");
         		return;
         	}
         }
