@@ -68,8 +68,8 @@ public class SceneManager {
         }
         
         Scene scene = baseScene.createScene();
-        primaryStage.setWidth(1024);
-        primaryStage.setHeight(768);
+        primaryStage.setWidth(1224);
+        primaryStage.setHeight(728);
         primaryStage.setScene(scene);
     }
 }
