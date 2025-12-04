@@ -35,6 +35,7 @@ public class CourseCatalogScene extends BaseScene {
     
     @Override
     protected Parent buildScene() {
+//    	SceneManager.getDataAccess().viewCourses();
     	
     	
     	// get data
