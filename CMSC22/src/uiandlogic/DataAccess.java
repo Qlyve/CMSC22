@@ -230,36 +230,6 @@ public class DataAccess {
 	public ArrayList<ObservableList<Course>> getMasterList(){
 		return allCourseLists;
 	}
-		
-	// saves users by reading
-//	private void saveUsers() {
-//		BufferedWriter writer = null;
-//	 	
-//	 	try {
-//	 		writer = Files.newBufferedWriter(USER_PATH);
-//	 		
-//	 		for(User user : userList) {
-//	 			String middle = user.getMiddleName() == null ? "" : user.getMiddleName(); // create the instance of a middle name even if not present to be empty
-//	 			String line = String.join(",", 
-//	 					user.getUsername(),
-//	 					user.getEmailAddress(),
-//	 					user.getFirstName(),
-//	 					middle,
-//	 					user.getLastName(),
-//	 					user.getUserType(),
-//	 					user.getPassword()
-//	 					);
-//	 				
-//	 			writer.write(line);
-//	 			writer.newLine();
-//	 		}
-//	 			
-//	 		writer.close();
-//	 			
-//	 	} catch (IOException e) {
-//	 		e.printStackTrace();
-//	 	}
-//	}
 	
 	public void viewUsers() {
 		for(User user : userList) {
@@ -275,14 +245,10 @@ public class DataAccess {
 		}
 	}
 	
-
-    
     public static DataAccess getInstance() {
         if (instance == null) {
             instance = new DataAccess();
         }
         return instance;
-    }
-	
-		
+    }	
 }

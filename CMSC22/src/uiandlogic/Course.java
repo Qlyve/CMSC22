@@ -31,28 +31,28 @@ public class Course {
 	}
 	
 		
-		public void viewCourse() {
-			int i = 1;
-		    System.out.println("\n================================================================================");
-		    System.out.printf("  Course Code : %s\n", courseCode);
-		    System.out.printf("  Course Name : %s\n", courseName);
-		    System.out.printf("  Units       : %s\n", units);
-		    System.out.println("--------------------------------------------------------------------------------");
-		    System.out.printf("  Description : %s\n", description);
-		    System.out.println("--------------------------------------------------------------------------------");
-		    System.out.println("  Available Sections:");
-		    System.out.println();
-		    System.out.printf("  %-3s %-12s %-18s %-15s %-20s\n", 
-		        "#", "Section", "Time", "Days", "Room");
-		    System.out.println("--------------------------------------------------------------------------------");
-		    
-			for(Section section : sections) {
-				System.out.printf("  %-3d", i);
-				section.viewState();
-				i ++;
-			}
-			
-		    System.out.println("================================================================================\n");
+	public void viewCourse() {
+		int i = 1;
+	    System.out.println("\n================================================================================");
+	    System.out.printf("  Course Code : %s\n", courseCode);
+	    System.out.printf("  Course Name : %s\n", courseName);
+	    System.out.printf("  Units       : %s\n", units);
+	    System.out.println("--------------------------------------------------------------------------------");
+	    System.out.printf("  Description : %s\n", description);
+	    System.out.println("--------------------------------------------------------------------------------");
+	    System.out.println("  Available Sections:");
+	    System.out.println();
+	    System.out.printf("  %-3s %-12s %-18s %-15s %-20s\n", 
+	        "#", "Section", "Time", "Days", "Room");
+	    System.out.println("--------------------------------------------------------------------------------");
+	    
+		for(Section section : sections) {
+			System.out.printf("  %-3d", i);
+			section.viewState();
+			i ++;
 		}
+		
+	    System.out.println("================================================================================\n");
+	}
 
 }
