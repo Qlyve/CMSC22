@@ -16,53 +16,57 @@ public class SceneManager {
     private static User currentUser;
     private static DataAccess dataAccess; // this is responsible for updating the data base throughout all the controller
 
+
     public static void setStage(Stage stage) {
         primaryStage = stage;
     }
-
+    
+    
     // update currently signed in user
     public static void setUser(User user) {
         currentUser = user;
     }
-
+    
     // signed in user for current session (for displaying later)
     public static User getUser() {
         return currentUser;
     }
-
+    
     public static Stage getStage() {
         return primaryStage;
     }
-
+    
     // to be able to access DataAccess through this class
     public static void setDataAccess(DataAccess da) {
         dataAccess = da;
     }
-
+    
     public static DataAccess getDataAccess() {
         return dataAccess;
     }
-
+    
     // method to switch between scenes
     public static void switchTo(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
+            
             Parent root = loader.load();
-
+            
             // set a dimension to maintain consistent sizing through all the scenes
-            primaryStage.setScene(new Scene(root, 900, 600));
+            primaryStage.setScene(new Scene(root, 900, 600)); 
             primaryStage.show();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
     // method overloading for switching scenes WITH baseScene as parameter instead of fxml
     public static void switchTo(BaseScene baseScene) {
         if (primaryStage == null) {
             throw new IllegalStateException("SceneManager was not initialized.");
         }
-
+        
         Scene scene = baseScene.createScene();
         primaryStage.setWidth(1024);
         primaryStage.setHeight(768);

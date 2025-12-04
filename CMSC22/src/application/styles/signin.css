@@ -4,7 +4,6 @@
 
 .card {
     -fx-background-color: white;
-    -fx-background-radius: 15px;
     -fx-padding: 30 40 30 40;
     -fx-spacing: 15;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 20, 0.2, 0, 4);
