@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -25,173 +24,109 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import uiandlogic.Course;
 import uiandlogic.Section;
-import uiandlogic.Schedule;
 import uiandlogic.User;
 
 public class PlannerScene extends BaseScene {
     
     private User currentUser;
-    private Schedule schedule;
-    
-    // for refreshing schedule when updating
-    private VBox enrolledListContainer; 
-    private Runnable refreshDropdownsReference; 
     
     public PlannerScene(User user) {
         this.currentUser = user;
-        this.schedule = new Schedule(user, scale);
-        this.enrolledListContainer = new VBox(5); // Spacing 5 between enrolled items
     }
     
     @Override
     protected Parent buildScene() {
     	// main container
     	HBox mainContainer = new HBox();
-    	// sidebar
+        // create and add the sidebar
         Sidebar sidebar = new Sidebar(scale, "Planner", currentUser);
         
-        // background area the grey part
+        // create background area 
         StackPane backgroundArea = new StackPane();
         backgroundArea.setAlignment(Pos.CENTER);
-        backgroundArea.setStyle("-fx-background-color: #E5E5E5;");
+        backgroundArea.setStyle("-fx-background-color: #D9D9D9;");
         backgroundArea.setPadding(new Insets(35 * scale));
         HBox.setHgrow(backgroundArea, Priority.ALWAYS);
         
-        // where the actual elements
+        // create main area for content
         StackPane contentArea = new StackPane();
         contentArea.setAlignment(Pos.CENTER);
-        contentArea.setStyle("-fx-background-color: white;-fx-background-radius: 10; -fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-border-radius: 10;");
+        contentArea.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #222222; -fx-border-width: 1px;");
+        contentArea.setPrefWidth(1050 * scale);
         contentArea.setPrefWidth(970 * scale);
         
-        DropShadow shadow = new DropShadow();
-        shadow.setRadius(10);
-        shadow.setOffsetX(0);
-        shadow.setOffsetY(4);
-        shadow.setColor(Color.rgb(0, 0, 0, 0.2));
-        contentArea.setEffect(shadow);
-        
+        // lay the element in a vbox
         VBox layout = new VBox(20);
-        layout.setPadding(new Insets(20));
+//        layout.setPadding(new Insets(20));
         
-        // title container
+        // title container 
         HBox titleContainer = new HBox();
         Label title = new Label("Planner");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2F4156;");
+        title.setPadding(new Insets(10, 0, 0, 10));
+        title.setStyle("-fx-font-size: 24px; -fx-text-fill: #222222; -fx-font-weight: bold;");
+//        HBox.setHgrow(titleContainer, Priority.ALWAYS);
         titleContainer.getChildren().addAll(title);
-        titleContainer.setAlignment(Pos.CENTER); 
         
-        // schedule and planned/enrolled container
-        HBox schedAndEnrolledContainer = new HBox(20);
+        // schedule container and enrolled courses container
+        HBox schedAndEnrolledContainer = new HBox();
         
-        // schedule container
         VBox scheduleMainContainer = new VBox();
-        scheduleMainContainer.setPrefWidth(827 * scale);
-        HBox.setHgrow(scheduleMainContainer, Priority.ALWAYS);
+        scheduleMainContainer.setPrefHeight(542 * scale);
+        scheduleMainContainer.setPrefWidth(707 * scale);
+        scheduleMainContainer.setStyle("-fx-border-color: #222222; -fx-border-width: .5px;");
         
-        // weekly title container
-        HBox weeklySchedTitleContainer = new HBox();
-        weeklySchedTitleContainer.setPadding(new Insets(0, 0, 10, 0));
+        
+        HBox weeklySchedTitleContainer = new HBox(5);
+        weeklySchedTitleContainer.setPadding(new Insets(10));
         Label weeklySched = new Label("Weekly Schedule");
         weeklySched.setStyle("-fx-font-size: 16px; -fx-text-fill: #222222; ");
+        Button tempButton1 = new Button("1");
+        Button tempButton2 = new Button("2");
+        Button tempButton3 = new Button("3");
         
-        weeklySchedTitleContainer.getChildren().addAll(weeklySched);
+        // makes button on the right side while label on the left side
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        weeklySchedTitleContainer.getChildren().addAll(weeklySched, spacer, tempButton1, tempButton2, tempButton3);
        
-        // schedule panel from schedule
-        ScrollPane schedContainer = schedule.getScrollableGrid();
-        schedContainer.setStyle("-fx-background-color: white; -fx-background: white;");
-        schedContainer.setPadding(new Insets(0,-10,0,15));
-        schedContainer.setPrefHeight(500 * scale); 
+        // continer for sched specifically
+        StackPane schedContainer = new StackPane();
+        Label tempSched = new Label("Schedule here");
+        schedContainer.getChildren().addAll(tempSched);
         VBox.setVgrow(schedContainer, Priority.ALWAYS);
         
-        scheduleMainContainer.getChildren().addAll(weeklySchedTitleContainer, schedContainer);
+        scheduleMainContainer.getChildren().addAll(weeklySchedTitleContainer,schedContainer );
         
-        //  enrolled/planned container
-        VBox enrolledArea = new VBox(10);
-        enrolledArea.setPrefWidth(243 * scale);
-        enrolledArea.setStyle("-fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-background-color: #F9F9F9; -fx-padding: 10;");
+        // container for enrolled courses
+        StackPane enrolledContainer = new StackPane();
+        enrolledContainer.setStyle("-fx-border-color: #222222; -fx-border-width: .5px;");
+        enrolledContainer.setPrefHeight(542 * scale);
+        enrolledContainer.setPrefWidth(343 * scale);
+        Label tempEnrolled = new Label("Enrolled Courses Here");
+        enrolledContainer.getChildren().addAll(tempEnrolled);
         
-        Label enrolledTitle = new Label("Planned Courses");
-        enrolledTitle.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #2F4156;");
-        
-        // scrollPane for the enrolled list
-        ScrollPane enrolledScroll = new ScrollPane(enrolledListContainer);
-        enrolledScroll.setFitToWidth(true);
-        enrolledScroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
-        enrolledScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        VBox.setVgrow(enrolledScroll, Priority.ALWAYS);
-        
-        enrolledArea.getChildren().addAll(enrolledTitle, enrolledScroll);
-        
-        schedAndEnrolledContainer.getChildren().addAll(scheduleMainContainer, enrolledArea);
+        HBox.setHgrow(schedAndEnrolledContainer, Priority.ALWAYS);
+        schedAndEnrolledContainer.getChildren().addAll(scheduleMainContainer, enrolledContainer);
 
-        // add everything to layout
-        // implement a runable to update and the planned list to buildSection so it can update
-        Runnable updateEnrolledList = () -> refreshEnrolledList();
-        
-        layout.getChildren().addAll(titleContainer, schedAndEnrolledContainer, buildSection(updateEnrolledList));
-        
+        layout.getChildren().addAll(titleContainer,  schedAndEnrolledContainer, buildSection());
         contentArea.getChildren().add(layout);
         backgroundArea.getChildren().addAll(contentArea);
         mainContainer.getChildren().addAll(sidebar.getSidebar(), backgroundArea);
         
-        refreshEnrolledList();
-        
         return mainContainer;
     }
     
-    // method to handle list
-    private void refreshEnrolledList() {
-        enrolledListContainer.getChildren().clear();
-        
-        if (currentUser.getPlannedCourses().isEmpty()) {
-            Label empty = new Label("No courses enrolled.");
-            empty.setStyle("-fx-text-fill: #777; -fx-font-style: italic; -fx-font-size: 11px;");
-            enrolledListContainer.getChildren().add(empty);
-            return;
-        }
-
-        for (Section section : currentUser.getPlannedCourses()) {
-            HBox row = new HBox(10);
-            row.setAlignment(Pos.CENTER_LEFT);
-            row.setStyle("-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 3; -fx-padding: 5;");
-            
-            VBox info = new VBox(2);
-            Label code = new Label(section.getCourseCode());
-            code.setStyle("-fx-font-weight: bold; -fx-font-size: 8px;");
-            Label secInfo = new Label("Section: " + section.getSectionCode());
-            secInfo.setStyle("-fx-font-size: 10px; -fx-text-fill: #555;");
-            info.getChildren().addAll(code, secInfo);
-            HBox.setHgrow(info, Priority.ALWAYS);
-            
-            Button removeBtn = new Button("x");
-            removeBtn.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-size: 9px; -fx-min-width: 20px; -fx-max-height: 20px;");
-            removeBtn.setOnAction(e -> {
-                currentUser.removeSection(section);
-                // update the grid/refresh it
-                schedule.setUser(currentUser); 
-                // update list
-                refreshEnrolledList();    
-                // update dropdown
-                if (refreshDropdownsReference != null) {
-                    refreshDropdownsReference.run(); 
-                }
-            });
-            
-            row.getChildren().addAll(info, removeBtn);
-            enrolledListContainer.getChildren().add(row);
-        }
-    }
-    
-    private VBox buildSection(Runnable onListUpdate) {
+    // METHODS AND FUNCTIONS
+    private VBox buildSection() {
     	VBox sectionContainer = new VBox();
-    	sectionContainer.setSpacing(5);
-    	sectionContainer.setAlignment(Pos.TOP_CENTER); 
+    	sectionContainer.setSpacing(10);
+    	sectionContainer.setPadding(new Insets(10));
     	
     	// ==Header==
     	HBox header = new HBox();
-        header.setPadding(new Insets(3)); // Reduced padding
-        header.setSpacing(5);
-        header.setStyle("-fx-background-color: #2F4156; -fx-background-radius: 3;");
+        header.setPadding(new Insets(10));
+        header.setSpacing(40);
+        header.setStyle("-fx-background-color: #2F4156; -fx-background-radius: 5;");
         
 		Label colCourseCode = new Label("Course Code");
 		Label colCourseTitle = new Label("Course Title");
@@ -200,20 +135,29 @@ public class PlannerScene extends BaseScene {
 		Label colTime = new Label("Time");
 		Label colAction = new Label("Action");
 		
-		List<Label> labels = Arrays.asList(colCourseCode, colCourseTitle, colUnits, colSection, colTime, colAction);
+		List<Label> labels = Arrays.asList(
+		        colCourseCode, colCourseTitle, colUnits, colSection, colTime, colAction
+		);
 
 		for (Label lbl : labels) {
 		    lbl.setTextFill(Color.WHITE);
-		    lbl.setStyle("-fx-font-weight: bold; -fx-font-size: 11px;"); 
+		    lbl.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 		}
 		
+		HBox codeCol = makeColumn(colCourseCode, 150);
+		HBox titleCol = makeColumn(colCourseTitle, 130);
+		HBox unitsCol = makeColumn(colUnits,  100);
+		HBox sectionCol = makeColumn(colSection, 100);
+		HBox timeCol = makeColumn(colTime, 120);
+	    HBox actionCol  = makeColumn(colAction, 150);
+
 		header.getChildren().addAll(
-			makeColumn(colCourseCode, 150),
-			makeColumn(colCourseTitle, 130),
-			makeColumn(colUnits,  100),
-			makeColumn(colSection, 100),
-			makeColumn(colTime, 120),
-			makeColumn(colAction, 150)
+				codeCol,
+				titleCol,
+				unitsCol,
+				sectionCol,
+				timeCol,
+				actionCol
 		);
 		
 		// ==Search Bar==
@@ -224,18 +168,21 @@ public class PlannerScene extends BaseScene {
 		TextField searchField = new TextField();
 		searchField.setPromptText("Search specific course...");
 		searchField.setPrefWidth(800);
-		searchField.setPrefHeight(35); 
-		searchField.setStyle("-fx-border-color: #2F4156; -fx-border-width: 1.5; -fx-border-radius: 2; -fx-font-size: 12px;");
+		searchField.setPrefHeight(70);
+		searchField.setStyle("-fx-border-color: #2F4156; -fx-border-width: 2; -fx-border-radius: 5;");
 		
 		searchBar.getChildren().add(searchField);
 		sectionContainer.getChildren().add(searchBar);
 		
+		// Add header between the search bar and the main content
 		header.setPrefWidth(700); 
+		sectionContainer.setAlignment(Pos.CENTER); 
+		
 		sectionContainer.getChildren().add(header);
 		
 		// ==Content Section==
 		VBox dropdownContainer = new VBox();
-	    dropdownContainer.setSpacing(5); 
+	    dropdownContainer.setSpacing(5);
 	    
 	    ArrayList<ObservableList<Course>> listOfLists = SceneManager.getDataAccess().getMasterList();
         ObservableList<Course> masterList = FXCollections.observableArrayList();
@@ -243,164 +190,125 @@ public class PlannerScene extends BaseScene {
         	masterList.addAll(list);
         }
         
-        // function to refresh dropdown reference
-        this.refreshDropdownsReference = new Runnable() {
-            @Override
-            public void run() {
-                dropdownContainer.getChildren().clear();
-                String search = searchField.getText().toLowerCase().trim();
-            
-    		    for (Course course: masterList) {
-    		    	if (!search.isEmpty()) {
-    	                boolean match = course.getCourseCode().toLowerCase().contains(search) ||
-    	                                course.getCourseName().toLowerCase().contains(search);
-    	                if (!match) continue;
-    	            }
-    		    	
-    		        TitledPane dropdown = new TitledPane();
-    		        boolean autoExpand = !search.isEmpty();
-    	
-    		        HBox rowHeader = new HBox();
-    		        rowHeader.setSpacing(40);
-    		        rowHeader.setPadding(new Insets(2)); 
-    	
-    		        Label dropColCourseCode = new Label(course.getCourseCode());
-    		        Label dropColCourseTitle = new Label(course.getCourseName());
-    		        Label dropColUnits = new Label(course.getUnits()); 
-    		        Label dropColSection = new Label("-");
-    		        Label dropColTime = new Label("-");
-    		        Label dropColAction = new Label("");
-    	
-    		        List<Label> dropLabels = Arrays.asList(dropColCourseCode, dropColCourseTitle, dropColUnits, dropColSection, dropColTime, dropColAction);
-    		        for (Label lbl : dropLabels) {
-    		            lbl.setTextFill(Color.BLACK);
-    		            lbl.setStyle("-fx-font-size: 11px;"); 
-    		        }
-    	
-    		        rowHeader.getChildren().addAll(
-    		        		makeColumn(dropColCourseCode, 65, Pos.CENTER_LEFT),
-    		        		makeColumn(dropColCourseTitle, 120),
-    		        		makeColumn(dropColUnits, 50),
-    		        		makeColumn(dropColSection, 50),
-    		        		makeColumn(dropColTime, 90),
-    		        		makeColumn(dropColAction, 100)
-    		        );
-    	
-    		        dropdown.setGraphic(rowHeader);
-    		        VBox tableContainer = new VBox();	        
-    		        tableContainer.setSpacing(0);
-    	
-    		        for (Section section: course.getSection()) {
-    		        	if(!section.getSectionCode().contains("-")) continue;
-    		        	
-    		            HBox row = new HBox();
-    		            row.setSpacing(20);
-    		            row.setPadding(new Insets(3)); 
-    		            row.setStyle("-fx-border-color: black; -fx-border-width: 0.5; -fx-border-radius: 2;");
-    		            
-    		            Label contentCode = new Label(section.getCourseCode());
-    		            Label contentName = new Label(section.getCourseName());
-    		            Label contentUnit = new Label(course.getUnits());
-    		            Label contentSection = new Label(section.getSectionCode());
-    		            Label contentTime = new Label(section.getTime());
-    		            
+        Runnable refreshDropdowns = () -> {
 
-    		            List<Label> contentLabels = Arrays.asList(contentCode, contentName, contentUnit, contentSection, contentTime);
-    		            for(Label l : contentLabels) l.setStyle("-fx-font-size: 10px;");
-    		            
-    		            Button actionButton = new Button();
-    		            actionButton.setPrefWidth(70); 
-    		            actionButton.setPrefHeight(20);
-    		            actionButton.setStyle("-fx-font-size: 8px;"); 
-    		            
-    		            boolean isExactSectionPlanned = currentUser.getPlannedCourses().contains(section);
-    		            boolean isCoursePlanned = currentUser.isCoursePlanned(course.getCourseCode());
-
-    		            if (isExactSectionPlanned) {
-    		                actionButton.setText("Remove");
-    		                actionButton.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-size: 8px;");
-    		                actionButton.setOnAction(e -> {
-    		                    currentUser.removeSection(section);
-    		                    schedule.setUser(currentUser);
-    		                    this.run(); 
-    		                    // refresh planned list
-    		                    onListUpdate.run(); 
-    		                });
-    		            } else if (isCoursePlanned) {
-    		                actionButton.setText("Unavailable");
-    		                actionButton.setDisable(true);
-    		            } else {
-    		                actionButton.setText("Add");
-    		                actionButton.setStyle("-fx-background-color: #2F4156; -fx-text-fill: white; -fx-font-size: 8px;");
-    		                actionButton.setOnAction(e -> {
-    		                    boolean success = currentUser.planSection(section);
-    		                    if(success) {
-    		                    	schedule.setUser(currentUser);
-    		                        this.run(); 
-    		                        // refresh planned list
-    		                        onListUpdate.run(); 
-    		                    }
-    		                });
-    		            }
-    	
-    		            row.getChildren().addAll(
-    	            		makeColumn(contentCode, 80),
-    	            		makeColumn(contentName, 132),
-    	            		makeColumn(contentUnit, 37),
-    		                makeColumn(contentSection, 60),
-    		                makeColumn(contentTime, 90),
-    		                makeColumn(actionButton, 100)
-    		            );
-    	
-    		            tableContainer.getChildren().add(row);
-    		        }
-    		        
-    		        if(course.getSection().isEmpty()) {
-    		        	Label noSection = new Label("No sections available.");
-    		            StackPane msgContainer = new StackPane(noSection);
-    		        	noSection.setPadding(new Insets(5));
-    		        	noSection.setStyle("-fx-font-size: 10px;");
-    		        	
-    		        	tableContainer.getChildren().add(msgContainer);
-    		        }
-    	        	
-    		        dropdown.setContent(tableContainer);
-    		        dropdown.setExpanded(autoExpand); 
-    		        
-    		        dropdownContainer.getChildren().add(dropdown);
-    		    }
-    		    
-    		    if (dropdownContainer.getChildren().isEmpty()) {
-    	            Label emptyMsg = new Label("No courses match your search.");
-    	            emptyMsg.setPadding(new Insets(10));
-    	            emptyMsg.setStyle("-fx-font-size: 10px;");
-    	            
-    	            dropdownContainer.getChildren().add(emptyMsg);
-    	        }
-            }
+            dropdownContainer.getChildren().clear();
+            String search = searchField.getText().toLowerCase().trim();
+        
+		    for (Course course: masterList) {
+		    	
+		    	if (!search.isEmpty()) {
+	                boolean match =
+	                        course.getCourseCode().toLowerCase().contains(search) ||
+	                        course.getCourseName().toLowerCase().contains(search);
+	
+	                if (!match) continue;
+	            }
+		    	
+		        TitledPane dropdown = new TitledPane();
+	
+		        HBox rowHeader = new HBox();
+		        rowHeader.setSpacing(40);
+		        rowHeader.setPadding(new Insets(5));
+	
+		        Label dropColCourseCode = new Label(course.getCourseCode());
+		        Label dropColCourseTitle = new Label(course.getCourseName());
+		        Label dropColUnits = new Label(course.getUnits()); 
+		        Label dropColSection = new Label("-");
+		        Label dropColTime = new Label("-");
+		        Label dropColAction = new Label("Action");
+	
+		        List<Label> dropLabels = Arrays.asList(dropColCourseCode, dropColCourseTitle, dropColUnits, dropColSection, dropColTime, dropColAction);
+		        for (Label lbl : dropLabels) {
+		            lbl.setTextFill(Color.BLACK);
+		            lbl.setStyle("-fx-font-size: 13;");
+		        }
+	
+		        HBox dropCodeCol = makeColumn(dropColCourseCode, 65);
+		        dropCodeCol.setAlignment(Pos.CENTER_LEFT);
+		        HBox dropTitleCol = makeColumn(dropColCourseTitle, 120);
+		        HBox dropUnitsCol = makeColumn(dropColUnits, 50);
+		        HBox dropSectionCol = makeColumn(dropColSection, 50);
+		        HBox dropTimeCol = makeColumn(dropColTime, 90);
+		        HBox dropActionCol = makeColumn(dropColAction, 100);
+	
+		        rowHeader.getChildren().addAll(dropCodeCol, dropTitleCol, dropUnitsCol, dropSectionCol, dropTimeCol, dropActionCol);
+	
+		        dropdown.setGraphic(rowHeader);
+		        	
+		        VBox tableContainer = new VBox();	        
+		        tableContainer.setSpacing(0);
+	
+		        for (Section section: course.getSection()) {
+		        	
+		        	if(!section.getSectionCode().contains("-")) {
+		        		continue;
+		        	}	
+		        	
+		            HBox row = new HBox();
+		            row.setSpacing(40);
+		            row.setPadding(new Insets(7));
+		            row.setStyle("-fx-border-color: black; -fx-border-width: 0.7; -fx-border-radius: 5;");
+		            
+		            Label contentCode = new Label(section.getCourseCode());
+		            Label contentName = new Label(section.getCourseName());
+		            Label contentUnit = new Label(course.getUnits());
+		            Label contentSection = new Label(section.getSectionCode());
+		            Label contentTime = new Label(section.getTime());
+		            Label contentAction = new Label("Edit");
+	
+		            row.getChildren().addAll(
+	            		makeColumn(contentCode, 80),
+	            		makeColumn(contentName, 132),
+	            		makeColumn(contentUnit, 37),
+		                makeColumn(contentSection, 60),
+		                makeColumn(contentTime, 90),
+		                makeColumn(contentAction, 100)
+		            );
+	
+		            tableContainer.getChildren().add(row);
+		        }
+		        
+		        if(course.getSection().isEmpty()) {
+		        	Label noSection = new Label("No sections available.");
+		        	noSection.setPadding(new Insets(5));
+		        	noSection.setFont(new Font(16));
+		        	
+		        	tableContainer.getChildren().add(noSection);
+		        }
+	        	
+		        dropdown.setContent(tableContainer);
+		        dropdown.setExpanded(false);
+		        dropdownContainer.getChildren().add(dropdown);
+		    }
+		    
+		    if (dropdownContainer.getChildren().isEmpty()) {
+	            Label emptyMsg = new Label("No courses match your search.");
+	            emptyMsg.setPadding(new Insets(10));
+	            emptyMsg.setStyle("-fx-font-size: 14;");
+	            dropdownContainer.getChildren().add(emptyMsg);
+	        }
         };
 	    
-        refreshDropdownsReference.run();
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> refreshDropdownsReference.run());
+        refreshDropdowns.run();
+        
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> refreshDropdowns.run());
         
 	    ScrollPane scrollPane = new ScrollPane(dropdownContainer);
 	    scrollPane.setFitToWidth(true);
 	    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
-	    scrollPane.setPrefHeight(200); 
+	    scrollPane.setPrefHeight(200);
 
 	    sectionContainer.getChildren().add(scrollPane);
 		
     	return sectionContainer;
     }
     
-    private HBox makeColumn(javafx.scene.Node node, double width) {
-        return makeColumn(node, width, Pos.CENTER);
-    }
-    
-    private HBox makeColumn(javafx.scene.Node node, double width, Pos alignment) {
-        HBox box = new HBox(node);
-        box.setAlignment(alignment);
+    private HBox makeColumn(Label label, double width) {
+        HBox box = new HBox(label);
+        box.setAlignment(Pos.CENTER);
         box.setPrefWidth(width);
         return box;
     }
+
 }

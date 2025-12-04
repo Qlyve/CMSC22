@@ -250,21 +250,5 @@ public class DataAccess {
             instance = new DataAccess();
         }
         return instance;
-    }
-    
-    public Section findSection(String courseCode, String sectionCode) {
-        for (ObservableList<Course> list : allCourseLists) {
-            for (Course course : list) {
-                if (course.getCourseCode().equals(courseCode)) {
-                    for (Section sec : course.getSection()) {
-                        if (sec.getSectionCode().equals(sectionCode)) {
-                            return sec;
-                        }
-                    }
-                }
-            }
-        }
-        System.out.println(courseCode + sectionCode + "Was not found!");
-        return null;
-    }
+    }	
 }
