@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -20,7 +21,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import uiandlogic.Course;
+import uiandlogic.Section;
 import uiandlogic.User;
 
 public class PlannerScene extends BaseScene {
@@ -104,16 +107,8 @@ public class PlannerScene extends BaseScene {
         
         HBox.setHgrow(schedAndEnrolledContainer, Priority.ALWAYS);
         schedAndEnrolledContainer.getChildren().addAll(scheduleMainContainer, enrolledContainer);
-        
-        // available sections
-        HBox sectionContainer = new HBox();
-        HBox.setHgrow(sectionContainer, Priority.ALWAYS);
-        
-		
-        sectionContainer.getChildren().addAll(buildSection());
-        
 
-        layout.getChildren().addAll(titleContainer,  schedAndEnrolledContainer, sectionContainer);
+        layout.getChildren().addAll(titleContainer,  schedAndEnrolledContainer, buildSection());
         contentArea.getChildren().add(layout);
         backgroundArea.getChildren().addAll(contentArea);
         mainContainer.getChildren().addAll(sidebar.getSidebar(), backgroundArea);
@@ -131,7 +126,7 @@ public class PlannerScene extends BaseScene {
     	HBox header = new HBox();
         header.setPadding(new Insets(10));
         header.setSpacing(40);
-        header.setStyle("-fx-background-color: #293b4d; -fx-background-radius: 5;");
+        header.setStyle("-fx-background-color: #2F4156; -fx-background-radius: 5;");
         
 		Label colCourseCode = new Label("Course Code");
 		Label colCourseTitle = new Label("Course Title");
@@ -165,6 +160,21 @@ public class PlannerScene extends BaseScene {
 				actionCol
 		);
 		
+		// ==Search Bar==
+		HBox searchBar = new HBox();
+		searchBar.setSpacing(10);
+		searchBar.setAlignment(Pos.CENTER);
+
+		TextField searchField = new TextField();
+		searchField.setPromptText("Search specific course...");
+		searchField.setPrefWidth(800);
+		searchField.setPrefHeight(70);
+		searchField.setStyle("-fx-border-color: #2F4156; -fx-border-width: 2; -fx-border-radius: 5;");
+		
+		searchBar.getChildren().add(searchField);
+		sectionContainer.getChildren().add(searchBar);
+		
+		// Add header between the search bar and the main content
 		header.setPrefWidth(700); 
 		sectionContainer.setAlignment(Pos.CENTER); 
 		
@@ -179,50 +189,115 @@ public class PlannerScene extends BaseScene {
         for(ObservableList<Course> list: listOfLists) {
         	masterList.addAll(list);
         }
+        
+        Runnable refreshDropdowns = () -> {
 
-	    for (Course course: masterList) {
-	        TitledPane dropdown = new TitledPane();
-
-	        HBox rowHeader = new HBox();
-	        rowHeader.setSpacing(40);
-	        rowHeader.setPadding(new Insets(5));
-
-	        Label dropColCourseCode = new Label(course.getCourseCode());
-	        Label dropColCourseTitle = new Label(course.getCourseName());
-	        Label dropColUnits = new Label(course.getUnits()); 
-	        Label dropColSection = new Label("-");
-	        Label dropColTime = new Label("-");
-	        Label dropColAction = new Label("Action");
-
-	        List<Label> dropLabels = Arrays.asList(dropColCourseCode, dropColCourseTitle, dropColUnits, dropColSection, dropColTime, dropColAction);
-	        for (Label lbl : dropLabels) {
-	            lbl.setTextFill(Color.BLACK);
-	            lbl.setStyle("-fx-font-size: 13;");
+            dropdownContainer.getChildren().clear();
+            String search = searchField.getText().toLowerCase().trim();
+        
+		    for (Course course: masterList) {
+		    	
+		    	if (!search.isEmpty()) {
+	                boolean match =
+	                        course.getCourseCode().toLowerCase().contains(search) ||
+	                        course.getCourseName().toLowerCase().contains(search);
+	
+	                if (!match) continue;
+	            }
+		    	
+		        TitledPane dropdown = new TitledPane();
+	
+		        HBox rowHeader = new HBox();
+		        rowHeader.setSpacing(40);
+		        rowHeader.setPadding(new Insets(5));
+	
+		        Label dropColCourseCode = new Label(course.getCourseCode());
+		        Label dropColCourseTitle = new Label(course.getCourseName());
+		        Label dropColUnits = new Label(course.getUnits()); 
+		        Label dropColSection = new Label("-");
+		        Label dropColTime = new Label("-");
+		        Label dropColAction = new Label("Action");
+	
+		        List<Label> dropLabels = Arrays.asList(dropColCourseCode, dropColCourseTitle, dropColUnits, dropColSection, dropColTime, dropColAction);
+		        for (Label lbl : dropLabels) {
+		            lbl.setTextFill(Color.BLACK);
+		            lbl.setStyle("-fx-font-size: 13;");
+		        }
+	
+		        HBox dropCodeCol = makeColumn(dropColCourseCode, 65);
+		        dropCodeCol.setAlignment(Pos.CENTER_LEFT);
+		        HBox dropTitleCol = makeColumn(dropColCourseTitle, 120);
+		        HBox dropUnitsCol = makeColumn(dropColUnits, 50);
+		        HBox dropSectionCol = makeColumn(dropColSection, 50);
+		        HBox dropTimeCol = makeColumn(dropColTime, 90);
+		        HBox dropActionCol = makeColumn(dropColAction, 100);
+	
+		        rowHeader.getChildren().addAll(dropCodeCol, dropTitleCol, dropUnitsCol, dropSectionCol, dropTimeCol, dropActionCol);
+	
+		        dropdown.setGraphic(rowHeader);
+		        	
+		        VBox tableContainer = new VBox();	        
+		        tableContainer.setSpacing(0);
+	
+		        for (Section section: course.getSection()) {
+		        	
+		        	if(!section.getSectionCode().contains("-")) {
+		        		continue;
+		        	}	
+		        	
+		            HBox row = new HBox();
+		            row.setSpacing(40);
+		            row.setPadding(new Insets(7));
+		            row.setStyle("-fx-border-color: black; -fx-border-width: 0.7; -fx-border-radius: 5;");
+		            
+		            Label contentCode = new Label(section.getCourseCode());
+		            Label contentName = new Label(section.getCourseName());
+		            Label contentUnit = new Label(course.getUnits());
+		            Label contentSection = new Label(section.getSectionCode());
+		            Label contentTime = new Label(section.getTime());
+		            Label contentAction = new Label("Edit");
+	
+		            row.getChildren().addAll(
+	            		makeColumn(contentCode, 80),
+	            		makeColumn(contentName, 132),
+	            		makeColumn(contentUnit, 37),
+		                makeColumn(contentSection, 60),
+		                makeColumn(contentTime, 90),
+		                makeColumn(contentAction, 100)
+		            );
+	
+		            tableContainer.getChildren().add(row);
+		        }
+		        
+		        if(course.getSection().isEmpty()) {
+		        	Label noSection = new Label("No sections available.");
+		        	noSection.setPadding(new Insets(5));
+		        	noSection.setFont(new Font(16));
+		        	
+		        	tableContainer.getChildren().add(noSection);
+		        }
+	        	
+		        dropdown.setContent(tableContainer);
+		        dropdown.setExpanded(false);
+		        dropdownContainer.getChildren().add(dropdown);
+		    }
+		    
+		    if (dropdownContainer.getChildren().isEmpty()) {
+	            Label emptyMsg = new Label("No courses match your search.");
+	            emptyMsg.setPadding(new Insets(10));
+	            emptyMsg.setStyle("-fx-font-size: 14;");
+	            dropdownContainer.getChildren().add(emptyMsg);
 	        }
-
-	        HBox dropCodeCol = makeColumn(dropColCourseCode, 80);
-	        dropCodeCol.setAlignment(Pos.CENTER_LEFT);
-	        HBox dropTitleCol = makeColumn(dropColCourseTitle, 100);
-	        HBox dropUnitsCol = makeColumn(dropColUnits, 50);
-	        HBox dropSectionCol = makeColumn(dropColSection, 70);
-	        HBox dropTimeCol = makeColumn(dropColTime, 67);
-	        HBox dropActionCol = makeColumn(dropColAction, 130);
-
-	        rowHeader.getChildren().addAll(dropCodeCol, dropTitleCol, dropUnitsCol, dropSectionCol, dropTimeCol, dropActionCol);
-
-	        dropdown.setGraphic(rowHeader);
-
-	        Label placeholder = new Label("sections");
-	        placeholder.setPadding(new Insets(10));
-	        dropdown.setContent(placeholder);
-
-	        dropdown.setExpanded(false);
-	        dropdownContainer.getChildren().add(dropdown);
-	    }
+        };
 	    
+        refreshDropdowns.run();
+        
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> refreshDropdowns.run());
+        
 	    ScrollPane scrollPane = new ScrollPane(dropdownContainer);
 	    scrollPane.setFitToWidth(true);
-	    scrollPane.setPrefHeight(250);
+	    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
+	    scrollPane.setPrefHeight(200);
 
 	    sectionContainer.getChildren().add(scrollPane);
 		
@@ -235,4 +310,5 @@ public class PlannerScene extends BaseScene {
         box.setPrefWidth(width);
         return box;
     }
+
 }

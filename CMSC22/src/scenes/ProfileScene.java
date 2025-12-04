@@ -28,7 +28,7 @@ public class ProfileScene extends BaseScene {
         
         // create content area
         VBox contentArea = new VBox(20 * scale);
-        contentArea.setPadding(new Insets(30 * scale));
+        contentArea.setPadding(new Insets(40 * scale));
         HBox.setHgrow(contentArea, Priority.ALWAYS);
         
         // profile information container
@@ -39,16 +39,16 @@ public class ProfileScene extends BaseScene {
                                "-fx-border-radius: 5; " +
                                "-fx-background-radius: 5;");
         profileInfoBox.setPadding(new Insets(20 * scale));
-        profileInfoBox.setMaxWidth(800 * scale);
+        HBox.setHgrow(profileInfoBox, Priority.ALWAYS);
         
         // title
         Label titleLabel = new Label("Profile Information");
-        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        titleLabel.setStyle("-fx-font-size: 32px; -fx-font-weight: bold;");
         
         // create grid for profile fields
         GridPane grid = new GridPane();
-        grid.setHgap(40 * scale);
-        grid.setVgap(15 * scale);
+        grid.setHgap(120 * scale);
+        grid.setVgap(25 * scale);
         grid.setPadding(new Insets(10 * scale, 0, 0, 0));
         
         // first row
@@ -79,12 +79,13 @@ public class ProfileScene extends BaseScene {
         VBox box = new VBox(5 * scale);
         
         Label label = new Label(labelText);
-        label.setStyle("-fx-font-size: 11px; -fx-text-fill: #666666;");
+        label.setStyle("-fx-font-size: 15px; -fx-text-fill: #666666;");
         
         Label value = new Label(valueText != null ? valueText : "");
-        value.setStyle("-fx-font-size: 13px; -fx-font-weight: bold;");
+        value.setStyle("-fx-font-size: 17px; -fx-font-weight: bold;");
         
         box.getChildren().addAll(label, value);
         return box;
     }
 }
+
