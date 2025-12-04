@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class SignUpController {
-    
+
     @FXML private TextField emailField;
     @FXML private TextField firstNameField;
     @FXML private TextField middleNameField;
@@ -26,15 +26,17 @@ public class SignUpController {
     public void initialize() {
         System.out.println("SignUpController initialized!");
 
+
         passwordVisibleField.textProperty().bindBidirectional(passwordField.textProperty());
         confirmPasswordVisibleField.textProperty().bindBidirectional(confirmPasswordField.textProperty());
-    }
 
+
+        categoryCombo.getItems().addAll("BSCS", "MIT", "MSCS", "PHD");
+    }
 
     @FXML
     private void togglePassword() {
         boolean show = showPasswordCheck.isSelected();
-
 
         passwordVisibleField.setVisible(show);
         passwordVisibleField.setManaged(show);
@@ -47,7 +49,6 @@ public class SignUpController {
         confirmPasswordField.setManaged(!show);
     }
 
-
     @FXML
     private void handleSignUp() {
 
@@ -56,18 +57,20 @@ public class SignUpController {
             return;
         }
 
+
         User newUser = new User(
             emailField.getText(),
             firstNameField.getText(),
             middleNameField.getText(),
             lastNameField.getText(),
-            categoryCombo.getValue(),  
+            categoryCombo.getValue(),
             passwordField.getText()
         );
 
         SceneManager.getDataAccess().addUser(newUser);
 
         System.out.println("Account created!");
+
 
         SceneManager.switchTo("/application/ui/sign_in.fxml");
     }
