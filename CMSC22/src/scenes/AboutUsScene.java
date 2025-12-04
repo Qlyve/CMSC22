@@ -76,7 +76,7 @@ public class AboutUsScene extends BaseScene {
         );
 
         VBox teamCardsWrapper = new VBox(20 * scale);
-        teamCardsWrapper.setAlignment(Pos.TOP_CENTER); // Center cards horizontally
+        teamCardsWrapper.setAlignment(Pos.TOP_CENTER); 
         teamCardsWrapper.setPadding(new Insets(0, 0, 20 * scale, 0));
         
         teamCardsWrapper.getChildren().addAll(member1, member2, member3, member4);
@@ -159,7 +159,7 @@ public class AboutUsScene extends BaseScene {
 
         VBox contributionBox = new VBox(8 * scale);
         contributionBox.setPadding(new Insets(10 * scale, 0, 0, 0));
-        VBox.setVgrow(contributionBox, Priority.ALWAYS); // Allow expansion
+        VBox.setVgrow(contributionBox, Priority.ALWAYS); 
         
         Label contributionTitle = new Label("Key Contributions");
         contributionTitle.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2F4156;");
@@ -168,7 +168,7 @@ public class AboutUsScene extends BaseScene {
         contributionText.setStyle("-fx-font-size: 13px; -fx-text-fill: #555555; -fx-line-spacing: 4px;");
         contributionText.setWrapText(true);
         contributionText.setMaxWidth(Double.MAX_VALUE);
-        VBox.setVgrow(contributionText, Priority.ALWAYS); // Allow text to expand
+        VBox.setVgrow(contributionText, Priority.ALWAYS); 
         
         contributionBox.getChildren().addAll(contributionTitle, contributionText);
 
@@ -185,7 +185,7 @@ public class AboutUsScene extends BaseScene {
         VBox infoBox = new VBox(12 * scale);
         infoBox.setPadding(new Insets(25 * scale, 35 * scale, 25 * scale, 35 * scale));
         infoBox.setAlignment(Pos.CENTER);
-        infoBox.setPrefWidth(1100 * scale); // Match card width
+        infoBox.setPrefWidth(1100 * scale);
         infoBox.setMaxWidth(1200 * scale);
         infoBox.setMinHeight(180 * scale);
         infoBox.setPrefHeight(200 * scale);
