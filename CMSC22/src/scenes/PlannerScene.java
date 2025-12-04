@@ -21,7 +21,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import uiandlogic.Course;
-import uiandlogic.Section;
 import uiandlogic.User;
 
 public class PlannerScene extends BaseScene {
@@ -201,52 +200,22 @@ public class PlannerScene extends BaseScene {
 	            lbl.setStyle("-fx-font-size: 13;");
 	        }
 
-	        HBox dropCodeCol = makeColumn(dropColCourseCode, 65);
+	        HBox dropCodeCol = makeColumn(dropColCourseCode, 80);
 	        dropCodeCol.setAlignment(Pos.CENTER_LEFT);
-	        HBox dropTitleCol = makeColumn(dropColCourseTitle, 120);
+	        HBox dropTitleCol = makeColumn(dropColCourseTitle, 100);
 	        HBox dropUnitsCol = makeColumn(dropColUnits, 50);
-	        HBox dropSectionCol = makeColumn(dropColSection, 50);
-	        HBox dropTimeCol = makeColumn(dropColTime, 90);
-	        HBox dropActionCol = makeColumn(dropColAction, 100);
+	        HBox dropSectionCol = makeColumn(dropColSection, 70);
+	        HBox dropTimeCol = makeColumn(dropColTime, 67);
+	        HBox dropActionCol = makeColumn(dropColAction, 130);
 
 	        rowHeader.getChildren().addAll(dropCodeCol, dropTitleCol, dropUnitsCol, dropSectionCol, dropTimeCol, dropActionCol);
 
 	        dropdown.setGraphic(rowHeader);
-	        	
-	        VBox tableContainer = new VBox();	        
-	        tableContainer.setSpacing(0);
-	        
-	        for (Section section : course.getSection()) {
-	        	
-	        	if(!section.getSectionCode().contains("-")) {
-	        		continue;
-	        	}	
-	        	
-	            HBox row = new HBox();
-	            row.setSpacing(40);
-	            row.setPadding(new Insets(7));
-	            row.setStyle("-fx-border-color: black; -fx-border-width: 0.7; -fx-border-radius: 5;");
-	            
-	            Label contentCode = new Label(section.getCourseCode());
-	            Label contentName = new Label(section.getCourseName());
-	            Label contentUnit = new Label(course.getUnits());
-	            Label contentSection = new Label(section.getSectionCode());
-	            Label contentTime = new Label(section.getTime());
-	            Label contentAction = new Label("Edit");
 
-	            row.getChildren().addAll(
-            		makeColumn(contentCode, 80),
-            		makeColumn(contentName, 132),
-            		makeColumn(contentUnit, 37),
-	                makeColumn(contentSection, 60),
-	                makeColumn(contentTime, 90),
-	                makeColumn(contentAction, 100)
-	            );
+	        Label placeholder = new Label("sections");
+	        placeholder.setPadding(new Insets(10));
+	        dropdown.setContent(placeholder);
 
-	            tableContainer.getChildren().add(row);
-	        }
-        	
-	        dropdown.setContent(tableContainer);
 	        dropdown.setExpanded(false);
 	        dropdownContainer.getChildren().add(dropdown);
 	    }
