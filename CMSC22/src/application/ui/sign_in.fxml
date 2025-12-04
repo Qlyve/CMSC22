@@ -20,24 +20,30 @@
                 <VBox alignment="CENTER" spacing="20" styleClass="card">
 
                     
-                    <Label styleClass="title" text="Sign in" />
+                    <Label styleClass="title" text="SIGN IN" />
 
                    
                     <VBox spacing="10" styleClass="form">
 
                         <Label styleClass="lbl" text="EMAIL:" />
                         <TextField fx:id="emailField" styleClass="input" />
+                        
+                        <Label fx:id="emailDomainErrorLabel" style="-fx-text-fill: red;" visible="false" managed="false"/>
 
                         <Label styleClass="lbl" text="PASSWORD:" />
-                        <PasswordField fx:id="passwordField" styleClass="input" />
-
+                        <StackPane>
+                            <PasswordField fx:id="passwordField" styleClass="input"/>
+                            <TextField fx:id="passwordVisibleField" styleClass="input"
+                                       visible="false" managed="false"/>
+                        </StackPane>
+                        
+                        <Label fx:id="errorLabel" textFill="red" visible="false" managed="false"/>
+                        
                         <HBox alignment="CENTER_LEFT" spacing="6">
-                            <CheckBox fx:id="showPasswordCheck" text="show" />
+                            <CheckBox fx:id="showPasswordCheck" text="Show your password" onAction="#togglePassword" />
                             <Pane HBox.hgrow="ALWAYS" />
-                            <Hyperlink fx:id="forgotPasswordLink" text="Forgot your password?" onAction="#openForgotPassword"/>
                         </HBox>
 
-                        
                         <Button onAction="#handleSignIn" styleClass="sign-btn" text="SIGN" />
                     </VBox>
 
@@ -46,7 +52,11 @@
                         <Label text="New user?" />
                         <Hyperlink fx:id="createAccountLink" text="Create an account" />
                     </HBox>
-
+                    
+					<HBox alignment="CENTER">
+                    	<Hyperlink fx:id="forgotPasswordLink" text="Forgot your password?" onAction="#openForgotPassword"/>
+                    </HBox>
+                    
                 </VBox>
             </VBox>
         </StackPane>
