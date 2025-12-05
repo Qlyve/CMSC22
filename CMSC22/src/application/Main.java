@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import uiandlogic.DataAccess;
+import uiandlogic.User;
 
 public class Main extends Application {
     @Override
@@ -15,7 +16,7 @@ public class Main extends Application {
         	DataAccess dataAccess = new DataAccess();
         	
         	// this line sets the data access for the current session which 
-        	// lets the program edit the data base just by calling SceneManager 
+        	// lets the program edit the d ata base just by calling SceneManager 
         	// (and access all methods inside DataAccess)
         	SceneManager.setDataAccess(dataAccess); 
         	
@@ -35,5 +36,17 @@ public class Main extends Application {
     }
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop(); 
+        User currentUser = SceneManager.getUser();
+        DataAccess dataAccess = SceneManager.getDataAccess();
+        
+        if (currentUser != null && dataAccess != null) {
+            dataAccess.saveUserPlan(currentUser);
+            System.out.println("Saved on exit.");
+        }
     }
 }

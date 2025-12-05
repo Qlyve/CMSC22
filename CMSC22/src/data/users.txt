@@ -1,2 +1,8 @@
 test1username,test1@gmail.com,test1FN,test1MN,test1LN,BSCS
 a,b,c,d,e,f
+1,2,3,4,5,5
+,,,,BSCS,
+acbundoc@up.edu.ph,Andrew Qlyve Paul,Castillo,Bundoc,BSCS,ac
+acbundoc@up.edu.ph,1,2,3,MIT,23
+admin@up.edu.ph,adminFN,adminMN,adminLN,BSCS,123
+BSCS@up.edu.ph,B,C,S,BSCS,1

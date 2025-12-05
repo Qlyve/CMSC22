@@ -18,6 +18,7 @@ public class Login {
             if (user.getUsername().equals(username) &&
                 user.getPassword().equals(password)) {
             	System.out.printf("Login successful welcome %s!\n" , user.getUsername() );
+				dataAccess.loadUserPlan(user);
                 return user;
             }
         }

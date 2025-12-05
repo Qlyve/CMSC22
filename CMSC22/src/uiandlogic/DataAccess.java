@@ -25,16 +25,19 @@ public class DataAccess {
 	private static final Path MSCS_COURSES_PATH = Paths.get("src/data/ics_mscs_courses.csv");
 	private static final Path MIT_COURSES_PATH = Paths.get("src/data/ics_mit_courses.csv");
 	private static final Path PHD_COURSES_PATH = Paths.get("src/data/ics_phd_courses.csv");
+
+	// path for storing user plans - each user gets their own file
+	private static final Path USER_PLANS_DIR = Paths.get("src/data/user_plans/");
 	
 	// lists
 	private ObservableList<Course> CMSCCourses = FXCollections.observableArrayList();
-//	private ObservableList<Course> MSCSCourses = FXCollections.observableArrayList();
+	private ObservableList<Course> MSCSCourses = FXCollections.observableArrayList();
 	private ObservableList<Course> MITCourses  = FXCollections.observableArrayList();
 	private ObservableList<Course> PHDCourses  = FXCollections.observableArrayList();
 	
 	private ArrayList<Path> coursePaths = new ArrayList<Path>(Arrays.asList(
 			CMSC_COURSES_PATH,
-//			MSCS_COURSES_PATH, 
+			MSCS_COURSES_PATH, 
 			MIT_COURSES_PATH, 
 			PHD_COURSES_PATH
 			));
@@ -42,7 +45,7 @@ public class DataAccess {
 
 	private ArrayList<ObservableList<Course>> allCourseLists = new ArrayList<>(Arrays.asList(
 		    CMSCCourses,
-//		    MSCSCourses,
+		    MSCSCourses,
 		    MITCourses,
 		    PHDCourses
 		));
@@ -54,6 +57,7 @@ public class DataAccess {
 		loadUsers();
 		loadCourses();
 		loadSections();
+		createUserPlansDirectory(); 
 	 }
 	 
 	// auto updates the list na makikita sa main
@@ -86,6 +90,7 @@ public class DataAccess {
 	// load courses
 	private void loadCourses() {
 		int i = 0;
+		String degree = null;
 		BufferedReader reader = null;
 		try {
 	      	for(Path path : coursePaths) {
@@ -98,17 +103,31 @@ public class DataAccess {
 //	      			String[] attributes = line.split(",");
 	      			String[] attributes = parseCSVLine(line);
 	      			
+	      			switch(i) {
+  					case 0:
+  						degree = "BSCS";
+  						break;
+  					case 1:
+  						degree = "MSCS";
+  						break;
+  					case 2:
+  						degree = "MIT";
+  						break;
+  					case 3:
+  						degree = "PHD";
+  						break;
+  					}
+	      			
+	      			
 	      			// create the course
 	      			Course newCourse = new Course(
 	      					attributes[0],
 	      					attributes[1], 
 	      					attributes[2],
-	      					attributes[3] 
+	      					attributes[3],
+	      					degree
 	      					);
-//	      			System.out.println(attributes[0]);
-//	      			System.out.println(attributes[1]);
-//	      			System.out.println(attributes[2]);
-//	      			System.out.println(attributes[3]);
+
 	      			
 	      			allCourseLists.get(i).add(newCourse);
 	      			line = reader.readLine();
@@ -229,36 +248,10 @@ public class DataAccess {
 		this.userList.add(newUser);
 		saveUsers();
 	}
-		
-	// saves users by reading
-//	private void saveUsers() {
-//		BufferedWriter writer = null;
-//	 	
-//	 	try {
-//	 		writer = Files.newBufferedWriter(USER_PATH);
-//	 		
-//	 		for(User user : userList) {
-//	 			String middle = user.getMiddleName() == null ? "" : user.getMiddleName(); // create the instance of a middle name even if not present to be empty
-//	 			String line = String.join(",", 
-//	 					user.getUsername(),
-//	 					user.getEmailAddress(),
-//	 					user.getFirstName(),
-//	 					middle,
-//	 					user.getLastName(),
-//	 					user.getUserType(),
-//	 					user.getPassword()
-//	 					);
-//	 				
-//	 			writer.write(line);
-//	 			writer.newLine();
-//	 		}
-//	 			
-//	 		writer.close();
-//	 			
-//	 	} catch (IOException e) {
-//	 		e.printStackTrace();
-//	 	}
-//	}
+	
+	public ArrayList<ObservableList<Course>> getMasterList(){
+		return allCourseLists;
+	}
 	
 	public void viewUsers() {
 		for(User user : userList) {
@@ -274,14 +267,98 @@ public class DataAccess {
 		}
 	}
 	
-
-    
     public static DataAccess getInstance() {
         if (instance == null) {
             instance = new DataAccess();
         }
         return instance;
     }
+    
+    public Section findSection(String courseCode, String sectionCode) {
+        for (ObservableList<Course> list : allCourseLists) {
+            for (Course course : list) {
+                if (course.getCourseCode().equals(courseCode)) {
+                    for (Section sec : course.getSection()) {
+                        if (sec.getSectionCode().equals(sectionCode)) {
+                            return sec;
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(courseCode + sectionCode + "Was not found!");
+        return null;
+    }
+
+	// create user_plans directory if it doesn't exist
+	private void createUserPlansDirectory() {
+		try {
+			if (!Files.exists(USER_PLANS_DIR)) {
+				Files.createDirectories(USER_PLANS_DIR);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
-		
+	// load a specific user's planned courses from their individual file
+	public void loadUserPlan(User user) {
+		BufferedReader reader = null;
+		try {
+			Path userPlanFile = USER_PLANS_DIR.resolve(user.getUsername() + "_plan.txt");
+			
+			// If file doesn't exist, user has no saved plan yet
+			if (!Files.exists(userPlanFile)) {
+				return;
+			}
+			
+			reader = Files.newBufferedReader(userPlanFile);
+			String line = reader.readLine();
+			
+			// clear existing planned courses before loading
+			user.getPlannedCourses().clear();
+			
+			while (line != null) {
+				String[] parts = line.split(",");
+				if (parts.length == 2) {
+					String courseCode = parts[0];
+					String sectionCode = parts[1];
+					
+					// find the section
+					Section section = findSection(courseCode, sectionCode);
+					if (section != null) {
+						user.planSection(section);
+					}
+				}
+				line = reader.readLine();
+			}
+			reader.close();
+			System.out.println("Loaded plan for user: " + user.getUsername());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// save a specific user's planned courses to their individual file
+	public void saveUserPlan(User user) {
+		BufferedWriter writer = null;
+		try {
+			Path userPlanFile = USER_PLANS_DIR.resolve(user.getUsername() + "_plan.txt");
+			writer = Files.newBufferedWriter(userPlanFile);
+			
+			for (Section section : user.getPlannedCourses()) {
+				String line = String.join(",",
+						section.getCourseCode(),
+						section.getSectionCode()
+				);
+				writer.write(line);
+				writer.newLine();
+			}
+			writer.close();
+			System.out.println("Saved plan for user: " + user.getUsername());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
+
