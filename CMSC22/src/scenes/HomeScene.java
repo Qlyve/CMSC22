@@ -35,6 +35,7 @@ public class HomeScene extends BaseScene {
         // Right side of the screen (main content)
         StackPane contentArea = new StackPane();
         contentArea.setAlignment(Pos.CENTER);
+        contentArea.setPrefWidth(970 * scale);
         HBox.setHgrow(contentArea, Priority.ALWAYS);
         
         VBox contentPanels = new VBox(20);
