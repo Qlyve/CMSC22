@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="600" prefWidth="900" stylesheets="@../styles/signin.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.SignInController">
-
+	
     <center>
         <StackPane>
             <VBox alignment="CENTER">

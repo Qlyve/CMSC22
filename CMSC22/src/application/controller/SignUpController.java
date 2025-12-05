@@ -3,7 +3,11 @@ package application.controller;
 import application.SceneManager;
 import uiandlogic.User;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -213,6 +217,17 @@ public class SignUpController {
             System.out.println("User saved to: " + file.getAbsolutePath());
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
+    private void handleBack() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/application/ui/sign_in.fxml"));
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

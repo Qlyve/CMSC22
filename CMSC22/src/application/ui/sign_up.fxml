@@ -17,7 +17,7 @@
             fx:controller="application.controller.SignUpController">
 
     <left>
-        <Pane prefWidth="450" style="-fx-background-color: linear-gradient(to right, #6fa0dd, #b9cbea);" />
+        <Pane prefWidth="450" style="-fx-background-color: #2F4156;" />
     </left>
 
     <center>
@@ -71,7 +71,10 @@
                         <Button maxWidth="Infinity" onAction="#handleSignUp" prefHeight="38.0"
                                 style="-fx-background-color: #1f2d3d; -fx-text-fill: white; -fx-padding: 10 0; -fx-font-weight: bold;"
                                 text="SIGN UP" />
-
+                                
+						<Button maxWidth="Infinity" onAction="#handleBack" prefHeight="38.0"
+                                style="-fx-background-color: transparent; -fx-text-fill: black; -fx-padding: 10 0; -fx-font-weight: bold;-fx-border-color: #9c9c9c;"
+                                text="BACK" />
                     </VBox>
                 </VBox>
             </content>
