@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.GridPane;
 import uiandlogic.User;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 
 public class ProfileScene extends BaseScene {
     
@@ -36,10 +38,19 @@ public class ProfileScene extends BaseScene {
         profileInfoBox.setStyle("-fx-background-color: white; " +
                                "-fx-border-color: #CCCCCC; " +
                                "-fx-border-width: 1; " +
-                               "-fx-border-radius: 5; " +
-                               "-fx-background-radius: 5;");
+                               "-fx-border-radius: 15; " +
+                               "-fx-background-radius: 15;");
         profileInfoBox.setPadding(new Insets(20 * scale));
         HBox.setHgrow(profileInfoBox, Priority.ALWAYS);
+        
+        // add drop shadow
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(12);
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(3);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.2)); 
+
+        profileInfoBox.setEffect(shadow);
         
         // title
         Label titleLabel = new Label("Profile Information");

@@ -26,6 +26,7 @@ public class HomeScene extends BaseScene {
     @Override
     protected Parent buildScene() {
         HBox mainContainer = new HBox();
+        mainContainer.setStyle("-fx-background-color: #E5E5E5;");
         
         // Sidebar
         Sidebar sidebar = new Sidebar(scale, "Home", currentUser);
