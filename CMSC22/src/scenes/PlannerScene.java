@@ -291,7 +291,7 @@ public class PlannerScene extends BaseScene {
                     rowHeader.setPadding(new Insets(2)); 
                     rowHeader.setAlignment(Pos.CENTER); 
         
-                    Label dropColCourseCode = new Label(course.getCourseCode());
+                    Label dropColCourseCode = new Label("\t\t\t\t " + course.getCourseCode());
                     Label dropColCourseTitle = new Label(course.getCourseName());
                     Label dropColUnits = new Label(course.getUnits()); 
                     Label dropColSection = new Label("-");
@@ -307,8 +307,8 @@ public class PlannerScene extends BaseScene {
                     }
         
                     rowHeader.getChildren().addAll(
-                        makeColumn(dropColCourseCode, 120, Pos.CENTER),
-                        makeColumn(dropColCourseTitle, 150, Pos.CENTER),
+                        makeColumn(dropColCourseCode, 170, Pos.CENTER_LEFT),
+                        makeColumn(dropColCourseTitle, 165, Pos.CENTER),
                         makeColumn(dropColUnits, 60, Pos.CENTER),
                         makeColumn(dropColSection, 80, Pos.CENTER),
                         makeColumn(dropColDay, 80, Pos.CENTER),
@@ -394,7 +394,7 @@ public class PlannerScene extends BaseScene {
         
                         row.getChildren().addAll(
                             makeColumn(contentCode, 120, Pos.CENTER),
-                            makeColumn(contentName, 150, Pos.CENTER),
+                            makeColumn(contentName, 170, Pos.CENTER),
                             makeColumn(contentUnit, 60, Pos.CENTER),
                             makeColumn(contentSection, 80, Pos.CENTER),
                             makeColumn(contentDay, 80, Pos.CENTER),
