@@ -18,11 +18,11 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.ComboBox;
 import uiandlogic.Course;
 import uiandlogic.Section;
 import uiandlogic.Schedule;
@@ -40,7 +40,7 @@ public class PlannerScene extends BaseScene {
     public PlannerScene(User user) {
         this.currentUser = user;
         this.schedule = new Schedule(user, scale);
-        this.enrolledListContainer = new VBox(5); // Spacing 5 between enrolled items
+        this.enrolledListContainer = new VBox(5); 
     }
     
     @Override
@@ -107,7 +107,8 @@ public class PlannerScene extends BaseScene {
         
         //  enrolled/planned container
         VBox enrolledArea = new VBox(10);
-        enrolledArea.setPrefWidth(243 * scale);
+        enrolledArea.setPrefWidth(450 * scale);
+        HBox.setHgrow(enrolledArea, Priority.SOMETIMES);
         enrolledArea.setStyle("-fx-border-color: #CCCCCC; -fx-border-width: 1; -fx-background-color: #F9F9F9; -fx-padding: 10;");
         
         Label enrolledTitle = new Label("Planned Courses");
@@ -183,214 +184,260 @@ public class PlannerScene extends BaseScene {
     }
     
     private VBox buildSection(Runnable onListUpdate) {
-    	VBox sectionContainer = new VBox();
-    	sectionContainer.setSpacing(5);
-    	sectionContainer.setAlignment(Pos.TOP_CENTER); 
-    	
-    	// ==Header==
-    	HBox header = new HBox();
-        header.setPadding(new Insets(3)); // Reduced padding
+        VBox sectionContainer = new VBox();
+        sectionContainer.setSpacing(5);
+        sectionContainer.setAlignment(Pos.TOP_CENTER); 
+        
+        // ==Header==
+        HBox header = new HBox();
+        header.setPadding(new Insets(3));
         header.setSpacing(5);
         header.setStyle("-fx-background-color: #2F4156; -fx-background-radius: 3;");
+        header.setAlignment(Pos.CENTER); // Center align header
         
-		Label colCourseCode = new Label("Course Code");
-		Label colCourseTitle = new Label("Course Title");
-		Label colUnits = new Label("Units");
-		Label colSection = new Label("Section");
-		Label colTime = new Label("Time");
-		Label colAction = new Label("Action");
-		
-		List<Label> labels = Arrays.asList(colCourseCode, colCourseTitle, colUnits, colSection, colTime, colAction);
+        Label colCourseCode = new Label("Course Code");
+        Label colCourseTitle = new Label("Course Title");
+        Label colUnits = new Label("Units");
+        Label colSection = new Label("Section");
+        Label colDay = new Label("Day");
+        Label colTime = new Label("Time");
+        Label colAction = new Label("Action");
+        
+        List<Label> labels = Arrays.asList(colCourseCode, colCourseTitle, colUnits, colSection, colDay, colTime, colAction);
 
-		for (Label lbl : labels) {
-		    lbl.setTextFill(Color.WHITE);
-		    lbl.setStyle("-fx-font-weight: bold; -fx-font-size: 11px;"); 
-		}
-		
-		header.getChildren().addAll(
-			makeColumn(colCourseCode, 150),
-			makeColumn(colCourseTitle, 130),
-			makeColumn(colUnits,  100),
-			makeColumn(colSection, 100),
-			makeColumn(colTime, 120),
-			makeColumn(colAction, 150)
-		);
-		
-		// ==Search Bar==
-		HBox searchBar = new HBox();
-		searchBar.setSpacing(10);
-		searchBar.setAlignment(Pos.CENTER);
-
-		TextField searchField = new TextField();
-		searchField.setPromptText("Search specific course...");
-		searchField.setPrefWidth(800);
-		searchField.setPrefHeight(35); 
-		searchField.setStyle("-fx-border-color: #2F4156; -fx-border-width: 1.5; -fx-border-radius: 2; -fx-font-size: 12px;");
-		
-		searchBar.getChildren().add(searchField);
-		sectionContainer.getChildren().add(searchBar);
-		
-		header.setPrefWidth(700); 
-		sectionContainer.getChildren().add(header);
-		
-		// ==Content Section==
-		VBox dropdownContainer = new VBox();
-	    dropdownContainer.setSpacing(5); 
-	    
-	    ArrayList<ObservableList<Course>> listOfLists = SceneManager.getDataAccess().getMasterList();
-        ObservableList<Course> masterList = FXCollections.observableArrayList();
-        for(ObservableList<Course> list: listOfLists) {
-        	masterList.addAll(list);
+        for (Label lbl : labels) {
+            lbl.setTextFill(Color.WHITE);
+            lbl.setStyle("-fx-font-weight: bold; -fx-font-size: 11px;"); 
         }
+        
+        header.getChildren().addAll(
+            makeColumn(colCourseCode, 120),
+            makeColumn(colCourseTitle, 150),
+            makeColumn(colUnits, 60),
+            makeColumn(colSection, 80),
+            makeColumn(colDay, 80),
+            makeColumn(colTime, 100),
+            makeColumn(colAction, 100)
+        );
+        
+        // ==Search Bar==
+        HBox searchBar = new HBox();
+        searchBar.setSpacing(10);
+        searchBar.setAlignment(Pos.CENTER);
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search specific course...");
+        searchField.setPrefWidth(500);
+        searchField.setPrefHeight(35); 
+        searchField.setStyle("-fx-border-color: #2F4156; -fx-border-width: 1.5; -fx-border-radius: 2; -fx-font-size: 12px;");
+        
+        searchBar.getChildren().add(searchField);
+        
+        sectionContainer.getChildren().add(searchBar);
+        
+        header.setPrefWidth(700); 
+        sectionContainer.getChildren().add(header);
+        
+        // ==Content Section==
+        VBox dropdownContainer = new VBox();
+        dropdownContainer.setSpacing(5);
+        
+        // filter the masterlist as you can only add courses based on your current degree/type
+        ArrayList<ObservableList<Course>> listOfLists = SceneManager.getDataAccess().getMasterList();
+        ObservableList<Course> masterList = FXCollections.observableArrayList();
+        
+        // check here
+        String userDegree = currentUser.getUserType(); 
+        
+        for(ObservableList<Course> list: listOfLists) {
+            for(Course course : list) {
+                // filter courses by user dergree/type
+                if(course.getTypeDegree().equals(userDegree)) {
+                    masterList.add(course);
+                }
+            }
+        }
+        
+        // create filtered list instead
+        FilteredList<Course> filteredList = new FilteredList<>(masterList, p -> true);
+        
+        // search filter
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            filteredList.setPredicate(course -> {
+                if (newVal == null || newVal.isEmpty()) return true;
+                
+                // only filter from coursecode or name
+                String lower = newVal.toLowerCase().trim();
+                return course.getCourseCode().toLowerCase().contains(lower) ||
+                       course.getCourseName().toLowerCase().contains(lower);
+            });
+            // refresh dropdown display
+            refreshDropdownsReference.run();
+        });
         
         // function to refresh dropdown reference
         this.refreshDropdownsReference = new Runnable() {
             @Override
             public void run() {
                 dropdownContainer.getChildren().clear();
-                String search = searchField.getText().toLowerCase().trim();
+                boolean autoExpand = !searchField.getText().isEmpty();
             
-    		    for (Course course: masterList) {
-    		    	if (!search.isEmpty()) {
-    	                boolean match = course.getCourseCode().toLowerCase().contains(search) ||
-    	                                course.getCourseName().toLowerCase().contains(search);
-    	                if (!match) continue;
-    	            }
-    		    	
-    		        TitledPane dropdown = new TitledPane();
-    		        boolean autoExpand = !search.isEmpty();
-    	
-    		        HBox rowHeader = new HBox();
-    		        rowHeader.setSpacing(40);
-    		        rowHeader.setPadding(new Insets(2)); 
-    	
-    		        Label dropColCourseCode = new Label(course.getCourseCode());
-    		        Label dropColCourseTitle = new Label(course.getCourseName());
-    		        Label dropColUnits = new Label(course.getUnits()); 
-    		        Label dropColSection = new Label("-");
-    		        Label dropColTime = new Label("-");
-    		        Label dropColAction = new Label("");
-    	
-    		        List<Label> dropLabels = Arrays.asList(dropColCourseCode, dropColCourseTitle, dropColUnits, dropColSection, dropColTime, dropColAction);
-    		        for (Label lbl : dropLabels) {
-    		            lbl.setTextFill(Color.BLACK);
-    		            lbl.setStyle("-fx-font-size: 11px;"); 
-    		        }
-    	
-    		        rowHeader.getChildren().addAll(
-    		        		makeColumn(dropColCourseCode, 65, Pos.CENTER_LEFT),
-    		        		makeColumn(dropColCourseTitle, 120),
-    		        		makeColumn(dropColUnits, 50),
-    		        		makeColumn(dropColSection, 50),
-    		        		makeColumn(dropColTime, 90),
-    		        		makeColumn(dropColAction, 100)
-    		        );
-    	
-    		        dropdown.setGraphic(rowHeader);
-    		        VBox tableContainer = new VBox();	        
-    		        tableContainer.setSpacing(0);
-    	
-    		        for (Section section: course.getSection()) {
-    		        	if(!section.getSectionCode().contains("-")) continue;
-    		        	
-    		            HBox row = new HBox();
-    		            row.setSpacing(20);
-    		            row.setPadding(new Insets(3)); 
-    		            row.setStyle("-fx-border-color: black; -fx-border-width: 0.5; -fx-border-radius: 2;");
-    		            
-    		            Label contentCode = new Label(section.getCourseCode());
-    		            Label contentName = new Label(section.getCourseName());
-    		            Label contentUnit = new Label(course.getUnits());
-    		            Label contentSection = new Label(section.getSectionCode());
-    		            Label contentTime = new Label(section.getTime());
-    		            
+                for (Course course: filteredList) {
+                    TitledPane dropdown = new TitledPane();
+        
+                    HBox rowHeader = new HBox();
+                    rowHeader.setSpacing(5);
+                    rowHeader.setPadding(new Insets(2)); 
+                    rowHeader.setAlignment(Pos.CENTER); 
+        
+                    Label dropColCourseCode = new Label(course.getCourseCode());
+                    Label dropColCourseTitle = new Label(course.getCourseName());
+                    Label dropColUnits = new Label(course.getUnits()); 
+                    Label dropColSection = new Label("-");
+                    Label dropColDay = new Label("-");
+                    Label dropColTime = new Label("-");
+                    Label dropColAction = new Label("");
+        
+                    List<Label> dropLabels = Arrays.asList(dropColCourseCode, dropColCourseTitle, dropColUnits, 
+                                                            dropColSection, dropColDay, dropColTime, dropColAction);
+                    for (Label lbl : dropLabels) {
+                        lbl.setTextFill(Color.BLACK);
+                        lbl.setStyle("-fx-font-size: 11px;"); 
+                    }
+        
+                    rowHeader.getChildren().addAll(
+                        makeColumn(dropColCourseCode, 120, Pos.CENTER),
+                        makeColumn(dropColCourseTitle, 150, Pos.CENTER),
+                        makeColumn(dropColUnits, 60, Pos.CENTER),
+                        makeColumn(dropColSection, 80, Pos.CENTER),
+                        makeColumn(dropColDay, 80, Pos.CENTER),
+                        makeColumn(dropColTime, 100, Pos.CENTER),
+                        makeColumn(dropColAction, 100, Pos.CENTER)
+                    );
+        
+                    dropdown.setGraphic(rowHeader);
+                    VBox tableContainer = new VBox();	        
+                    tableContainer.setSpacing(0);
+        
+                    // loop through sections for this course
+                    for (Section section: course.getSection()) {
+                        // skip sections with TBA in time or day
+                        if(section.getTime() != null && section.getTime().toUpperCase().contains("TBA")) continue;
+                        if(section.getDay() != null && section.getDay().toUpperCase().contains("TBA")) continue;
+                        
+                        HBox row = new HBox();
+                        row.setSpacing(5);
+                        row.setPadding(new Insets(3)); 
+                        row.setStyle("-fx-border-color: black; -fx-border-width: 0.5; -fx-border-radius: 2;");
+                        row.setAlignment(Pos.CENTER); 
+                        
+                        Label contentCode = new Label(section.getCourseCode());
+                        Label contentName = new Label(section.getCourseName());
+                        Label contentUnit = new Label(course.getUnits());
+                        Label contentSection = new Label(section.getSectionCode());
+                        Label contentDay = new Label(section.getDay() != null ? section.getDay() : "-");
+                        Label contentTime = new Label(section.getTime() != null ? section.getTime() : "-");
+                        
 
-    		            List<Label> contentLabels = Arrays.asList(contentCode, contentName, contentUnit, contentSection, contentTime);
-    		            for(Label l : contentLabels) l.setStyle("-fx-font-size: 10px;");
-    		            
-    		            Button actionButton = new Button();
-    		            actionButton.setPrefWidth(70); 
-    		            actionButton.setPrefHeight(20);
-    		            actionButton.setStyle("-fx-font-size: 8px;"); 
-    		            
-    		            boolean isExactSectionPlanned = currentUser.getPlannedCourses().contains(section);
-    		            boolean isCoursePlanned = currentUser.isCoursePlanned(course.getCourseCode());
-
-    		            if (isExactSectionPlanned) {
-    		                actionButton.setText("Remove");
-    		                actionButton.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-size: 8px;");
-    		                actionButton.setOnAction(e -> {
-    		                    currentUser.removeSection(section);
-    		                    schedule.setUser(currentUser);
-    		                    this.run(); 
-    		                    // refresh planned list
-    		                    onListUpdate.run(); 
-    		                });
-    		            } else if (isCoursePlanned) {
-    		                actionButton.setText("Unavailable");
-    		                actionButton.setDisable(true);
-    		            } else {
-    		                actionButton.setText("Add");
-    		                actionButton.setStyle("-fx-background-color: #2F4156; -fx-text-fill: white; -fx-font-size: 8px;");
-    		                actionButton.setOnAction(e -> {
-    		                    boolean success = currentUser.planSection(section);
-    		                    if(success) {
-    		                    	schedule.setUser(currentUser);
-    		                        this.run(); 
-    		                        // refresh planned list
-    		                        onListUpdate.run(); 
-    		                    }
-    		                });
-    		            }
-    	
-    		            row.getChildren().addAll(
-    	            		makeColumn(contentCode, 80),
-    	            		makeColumn(contentName, 132),
-    	            		makeColumn(contentUnit, 37),
-    		                makeColumn(contentSection, 60),
-    		                makeColumn(contentTime, 90),
-    		                makeColumn(actionButton, 100)
-    		            );
-    	
-    		            tableContainer.getChildren().add(row);
-    		        }
-    		        
-    		        if(course.getSection().isEmpty()) {
-    		        	Label noSection = new Label("No sections available.");
-    		            StackPane msgContainer = new StackPane(noSection);
-    		        	noSection.setPadding(new Insets(5));
-    		        	noSection.setStyle("-fx-font-size: 10px;");
-    		        	
-    		        	tableContainer.getChildren().add(msgContainer);
-    		        }
-    	        	
-    		        dropdown.setContent(tableContainer);
-    		        dropdown.setExpanded(autoExpand); 
-    		        
-    		        dropdownContainer.getChildren().add(dropdown);
-    		    }
-    		    
-    		    if (dropdownContainer.getChildren().isEmpty()) {
-    	            Label emptyMsg = new Label("No courses match your search.");
-    	            emptyMsg.setPadding(new Insets(10));
-    	            emptyMsg.setStyle("-fx-font-size: 10px;");
-    	            
-    	            dropdownContainer.getChildren().add(emptyMsg);
-    	        }
+                        List<Label> contentLabels = Arrays.asList(contentCode, contentName, contentUnit, 
+                                                                   contentSection, contentDay, contentTime);
+                        for(Label l : contentLabels) l.setStyle("-fx-font-size: 10px;");
+                        
+                        Button actionButton = new Button();
+                        actionButton.setPrefWidth(70); 
+                        actionButton.setPrefHeight(20);
+                        
+                        // check if section is already planned or is within time conflict
+                        boolean isExactSectionPlanned = currentUser.getPlannedCourses().contains(section);
+                        boolean isCoursePlanned = currentUser.isCoursePlanned(course.getCourseCode());
+                        boolean isTimeConflict = schedule.checkConflict(section, currentUser.getPlannedCourses());
+                        if (isExactSectionPlanned) {
+                        	// if section is planned only action is to remove
+                        	actionButton.setText("Remove");
+                            actionButton.setStyle("-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-size: 8px;");
+                            actionButton.setOnAction(e -> {
+                                currentUser.removeSection(section);
+                                
+                                // update schedule list and plannedlist
+                                schedule.setUser(currentUser);
+                                this.run(); 
+                                onListUpdate.run(); 
+                            });
+                        } else if (isCoursePlanned) {
+                            // if the course is planned, cannot add another 
+                            actionButton.setText("Unavailable");
+                            actionButton.setStyle("-fx-background-color: #808080; -fx-text-fill: white; -fx-font-size: 8px;");
+                            actionButton.setDisable(true);
+                            
+                        } else if (isTimeConflict) { 
+                                // if there's a time conflict, disable the button and show conflict instead
+                                actionButton.setText("Conflict");
+                                actionButton.setStyle("-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-size: 8px;");
+                                actionButton.setDisable(true);
+                        } else {
+                            // course not planned - show add button
+                            actionButton.setText("Add");
+                            actionButton.setStyle("-fx-background-color: #2F4156; -fx-text-fill: white; -fx-font-size: 8px;");
+                            actionButton.setOnAction(e -> {
+                                boolean success = currentUser.planSection(section);
+                                if(success) {
+                                    // update schedule list and plannedlist
+                                    schedule.setUser(currentUser);
+                                    this.run(); 
+                                    onListUpdate.run(); 
+                                }
+                            });
+                        }
+        
+                        row.getChildren().addAll(
+                            makeColumn(contentCode, 120, Pos.CENTER),
+                            makeColumn(contentName, 150, Pos.CENTER),
+                            makeColumn(contentUnit, 60, Pos.CENTER),
+                            makeColumn(contentSection, 80, Pos.CENTER),
+                            makeColumn(contentDay, 80, Pos.CENTER),
+                            makeColumn(contentTime, 100, Pos.CENTER),
+                            makeColumn(actionButton, 100, Pos.CENTER)
+                        );
+        
+                        tableContainer.getChildren().add(row);
+                    }
+                    
+                    // if no valid sections after filtering
+                    if(tableContainer.getChildren().isEmpty()) {
+                        Label noSection = new Label("No sections available.");
+                        StackPane msgContainer = new StackPane(noSection);
+                        noSection.setPadding(new Insets(5));
+                        noSection.setStyle("-fx-font-size: 10px;");
+                        
+                        tableContainer.getChildren().add(msgContainer);
+                    }
+                    
+                    dropdown.setContent(tableContainer);
+                    dropdown.setExpanded(autoExpand); 
+                    
+                    dropdownContainer.getChildren().add(dropdown);
+                }
+                
+                // for not showing anything
+                if (dropdownContainer.getChildren().isEmpty()) {
+                    Label emptyMsg = new Label("No courses match your search.");
+                    emptyMsg.setPadding(new Insets(10));
+                    emptyMsg.setStyle("-fx-font-size: 10px;");
+                    
+                    dropdownContainer.getChildren().add(emptyMsg);
+                }
             }
         };
-	    
-        refreshDropdownsReference.run();
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> refreshDropdownsReference.run());
-        
-	    ScrollPane scrollPane = new ScrollPane(dropdownContainer);
-	    scrollPane.setFitToWidth(true);
-	    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
-	    scrollPane.setPrefHeight(200); 
 
-	    sectionContainer.getChildren().add(scrollPane);
-		
-    	return sectionContainer;
+        refreshDropdownsReference.run();
+        
+        ScrollPane scrollPane = new ScrollPane(dropdownContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
+        scrollPane.setPrefHeight(200); 
+        sectionContainer.getChildren().add(scrollPane);
+        
+        return sectionContainer;
     }
     
     private HBox makeColumn(javafx.scene.Node node, double width) {

@@ -277,6 +277,54 @@ public class Schedule {
         return courseColors.get(courseCode);
     }
     
+    // checks if the section to be added has conflicts with current plan 
+    public boolean checkConflict(Section newSection, ArrayList<Section> currentPlan) {
+        // parse new section details
+        if (newSection.getTime() == null || newSection.getTime().contains("TBA")) return false;
+        if (newSection.getDay() == null || newSection.getDay().contains("TBA")) return false;
+
+        List<Integer> newDays = parseDays(newSection.getDay());
+        TimeSlot newTime = parseTimeRange(newSection.getTime());
+        
+        if (newTime == null || newDays.isEmpty()) return false;
+
+        int newStart = newTime.startRow;
+        int newEnd = newTime.startRow + newTime.duration;
+
+        // loop through existing sections
+        for (Section existing : currentPlan) {
+            // Skip if it's the same course (this is handled by "Unavailable" logic elsewhere)
+            if (existing.getCourseCode().equals(newSection.getCourseCode())) continue;
+            
+            // Skip invalid times
+            if (existing.getTime() == null || existing.getTime().contains("TBA")) continue;
+
+            // 3. Check Day Overlap
+            List<Integer> existingDays = parseDays(existing.getDay());
+            boolean daysOverlap = false;
+            for (int d : newDays) {
+                if (existingDays.contains(d)) {
+                    daysOverlap = true;
+                    break;
+                }
+            }
+            if (!daysOverlap) continue; // No day overlap = no conflict
+
+            // 4. Check Time Overlap
+            TimeSlot existingTime = parseTimeRange(existing.getTime());
+            if (existingTime == null) continue;
+
+            int exStart = existingTime.startRow;
+            int exEnd = existingTime.startRow + existingTime.duration;
+
+            // Standard interval overlap formula: StartA < EndB && StartB < EndA
+            if (newStart < exEnd && exStart < newEnd) {
+                return true; // Conflict found
+            }
+        }
+        return false;
+    }
+    
     // getters
     public ScrollPane getScrollableGrid() {
         ScrollPane sp = new ScrollPane(grid);

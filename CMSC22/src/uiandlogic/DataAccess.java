@@ -86,6 +86,7 @@ public class DataAccess {
 	// load courses
 	private void loadCourses() {
 		int i = 0;
+		String degree = null;
 		BufferedReader reader = null;
 		try {
 	      	for(Path path : coursePaths) {
@@ -98,12 +99,29 @@ public class DataAccess {
 //	      			String[] attributes = line.split(",");
 	      			String[] attributes = parseCSVLine(line);
 	      			
+	      			switch(i) {
+  					case 0:
+  						degree = "BSCS";
+  						break;
+  					case 1:
+  						degree = "MSCS";
+  						break;
+  					case 2:
+  						degree = "MIT";
+  						break;
+  					case 3:
+  						degree = "PHD";
+  						break;
+  					}
+	      			
+	      			
 	      			// create the course
 	      			Course newCourse = new Course(
 	      					attributes[0],
 	      					attributes[1], 
 	      					attributes[2],
-	      					attributes[3] 
+	      					attributes[3],
+	      					degree
 	      					);
 
 	      			

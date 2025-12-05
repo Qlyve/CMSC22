@@ -5,3 +5,4 @@ a,b,c,d,e,f
 acbundoc@up.edu.ph,Andrew Qlyve Paul,Castillo,Bundoc,BSCS,ac
 acbundoc@up.edu.ph,1,2,3,MIT,23
 admin@up.edu.ph,adminFN,adminMN,adminLN,BSCS,123
+BSCS@up.edu.ph,B,C,S,BSCS,1

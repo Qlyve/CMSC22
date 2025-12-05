@@ -87,7 +87,7 @@ public class User {
         if (!plannedCourses.contains(section)) {
             System.out.println("Section not in plan!");
         } else {
-            plannedCourses.remove(section); // Actually remove it
+            plannedCourses.remove(section); 
             System.out.println(section.getCourseCode() + " " + section.getSectionCode() + " successfully removed.");
         }
     }
