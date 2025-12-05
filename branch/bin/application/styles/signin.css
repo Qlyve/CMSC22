@@ -1,0 +1,42 @@
+.root {
+    -fx-background-color: #2F4156;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 15px;
+    -fx-padding: 30 40 30 40;
+    -fx-spacing: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 20, 0.2, 0, 4);
+    -fx-min-width: 350;
+    -fx-max-width: 350;
+    -fx-min-height: 400;
+    -fx-alignment: CENTER;
+}
+
+.title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.lbl {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.input {
+    -fx-background-color: #e6e6e6;
+    -fx-pref-height: 30;
+}
+
+.sign-btn {
+    -fx-background-color: #233142;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-pref-height: 100%;
+    -fx-pref-width: 400;
+}
+
+.hyperlink {
+    -fx-text-fill: #0066cc;
+}
