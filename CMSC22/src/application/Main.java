@@ -36,4 +36,16 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop(); 
+        User currentUser = SceneManager.getCurrentUser();
+        DataAccess dataAccess = SceneManager.getDataAccess();
+        
+        if (currentUser != null && dataAccess != null) {
+            dataAccess.saveUserPlan(currentUser);
+            System.out.println("Saved on exit.");
+        }
+    }
 }
