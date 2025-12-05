@@ -24,6 +24,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.TableCell;
 import uiandlogic.User;
 import uiandlogic.Course;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 
 
 public class CourseCatalogScene extends BaseScene {
@@ -55,16 +57,29 @@ public class CourseCatalogScene extends BaseScene {
         // create background area 
         StackPane backgroundArea = new StackPane();
         backgroundArea.setAlignment(Pos.CENTER);
-        backgroundArea.setStyle("-fx-background-color: #D9D9D9;");
+        backgroundArea.setStyle("-fx-background-color: #E5E5E5;");
         backgroundArea.setPadding(new Insets(35 * scale));
         HBox.setHgrow(backgroundArea, Priority.ALWAYS);
         
         // create main area for content
         StackPane contentArea = new StackPane();
         contentArea.setAlignment(Pos.CENTER);
-        contentArea.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #222222; -fx-border-width: 1px;");
-        contentArea.setPrefWidth(1050 * scale);
+        contentArea.setStyle(
+                "-fx-background-color: white;" +
+                "-fx-background-radius: 10;" +
+                "-fx-border-color: #CCCCCC;" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 10;"
+        );
         contentArea.setPrefWidth(970 * scale);
+
+        // Drop shadow identical to PlannerScene
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(10);
+        shadow.setOffsetX(0);
+        shadow.setOffsetY(4);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.2));
+        contentArea.setEffect(shadow);
         
         // lay the element in a vbox
         VBox layout = new VBox(20);
