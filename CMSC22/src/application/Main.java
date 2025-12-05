@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import uiandlogic.DataAccess;
+import uiandlogic.User;
 
 public class Main extends Application {
     @Override
