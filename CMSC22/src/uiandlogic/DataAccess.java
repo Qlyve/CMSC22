@@ -15,9 +15,8 @@ import javafx.collections.ObservableList;
 
 public class DataAccess {
 	
-	// class is mainly for creation reading updating and deleting basically modifying ng stuff.
-	// users pa lang to for reading and writing need dito ng pagread din sa csv and such 
 	private static DataAccess instance;
+	
 	// paths
 	private static final Path USER_PATH = Paths.get("src/data/users.txt");
 	private static final Path SECTIONS_PATH = Paths.get("src/data/course_offerings.csv");
@@ -25,6 +24,9 @@ public class DataAccess {
 	private static final Path MSCS_COURSES_PATH = Paths.get("src/data/ics_mscs_courses.csv");
 	private static final Path MIT_COURSES_PATH = Paths.get("src/data/ics_mit_courses.csv");
 	private static final Path PHD_COURSES_PATH = Paths.get("src/data/ics_phd_courses.csv");
+	
+	// path for storing planned courses
+	private static final Path PLANNED_COURSES_PATH = Paths.get("src/data/planned_courses.txt");
 	
 	// lists
 	private ObservableList<Course> CMSCCourses = FXCollections.observableArrayList();
@@ -39,7 +41,6 @@ public class DataAccess {
 			PHD_COURSES_PATH
 			));
 	
-
 	private ArrayList<ObservableList<Course>> allCourseLists = new ArrayList<>(Arrays.asList(
 		    CMSCCourses,
 		    MSCSCourses,
@@ -50,18 +51,17 @@ public class DataAccess {
 	private ObservableList<User> userList;
 	
 	public DataAccess() {
-		this.userList =  FXCollections.observableArrayList();
+		this.userList = FXCollections.observableArrayList();
 		loadUsers();
 		loadCourses();
 		loadSections();
-	 }
-	 
-	// auto updates the list na makikita sa main
+		loadPlannedCourses(); // load saved planned courses
+	}
+	
 	public ObservableList<User> getUsers(){
 		return userList;
 	}
 	
-	// helper method to parse CSV line since description has commmas
 	private String[] parseCSVLine(String line) {
 		List<String> result = new ArrayList<>();
 		StringBuilder current = new StringBuilder();
@@ -83,7 +83,6 @@ public class DataAccess {
 		return result.toArray(new String[0]);
 	}
 	
-	// load courses
 	private void loadCourses() {
 		int i = 0;
 		String degree = null;
@@ -92,11 +91,9 @@ public class DataAccess {
 	      	for(Path path : coursePaths) {
 	      		reader = Files.newBufferedReader(path);	
 	      		String line = reader.readLine();
-	      		line = 	reader.readLine(); // skip header 
+	      		line = reader.readLine(); // skip header 
 	      		
-	      		// loops through the end of file
 	      		while(line != null) {
-//	      			String[] attributes = line.split(",");
 	      			String[] attributes = parseCSVLine(line);
 	      			
 	      			switch(i) {
@@ -114,8 +111,6 @@ public class DataAccess {
   						break;
   					}
 	      			
-	      			
-	      			// create the course
 	      			Course newCourse = new Course(
 	      					attributes[0],
 	      					attributes[1], 
@@ -123,36 +118,30 @@ public class DataAccess {
 	      					attributes[3],
 	      					degree
 	      					);
-
 	      			
 	      			allCourseLists.get(i).add(newCourse);
 	      			line = reader.readLine();
 	      		} 
 	      		reader.close();
 	      		i += 1;
-	      		}
-	      	}catch (IOException e) {
-	      		// TODO Auto-generated catch block
-	      		e.printStackTrace();
-	      		return ;
 	      	}
+	    } catch (IOException e) {
+	      	e.printStackTrace();
+	      	return;
+	    }
 	}
 
-	// load sections
 	private void loadSections() {
 		BufferedReader reader = null;
 		try {
 	      	reader = Files.newBufferedReader(SECTIONS_PATH);	
 	      	String line = reader.readLine();
-	      	line = 	reader.readLine(); // skip school year
-	      	line = 	reader.readLine(); // skip header
+	      	line = reader.readLine(); // skip school year
+	      	line = reader.readLine(); // skip header
 	      		
-	      	// loops through the end of file
 	      	while(line != null) {
 	      		String[] attributes = line.split(",");
 	      			
-	      		// create the section
-	      		// skip course title and units since its on the class course 
 	      		Section newSection = new Section(
 	      				attributes[0],
 	      				attributes[1],
@@ -160,9 +149,8 @@ public class DataAccess {
 	      				attributes[4],
 	      				attributes[5],
 	      				attributes[6]
-	      				);
+	      		);
 	      			
-	      		// add the section to course if same course code
 	      		for(ObservableList<Course> specificTypeCourseList: allCourseLists) {
 	      			for(Course course : specificTypeCourseList) {
 	      				if(course.getCourseCode().equals(newSection.getCourseCode())) {
@@ -173,53 +161,117 @@ public class DataAccess {
 	      		line = reader.readLine();
 	      	} 
 	      	reader.close();
-	      }catch (IOException e) {
-	      	// TODO Auto-generated catch block
+	    } catch (IOException e) {
 	      	e.printStackTrace();
-	      	return ;
-	     	}
-		}
+	      	return;
+	    }
+	}
 	
-	// load users
 	private void loadUsers() {
       	BufferedReader reader = null;
       	try {
       		reader = Files.newBufferedReader(USER_PATH);	
       		String line = reader.readLine();
       		
-      		// loops through the end of file
       		while(line != null) {
-      				
-      			String[] attributes = line.split(",", -1); // to keep anything empty (For middle name which is optional)
-      			// create the user 
+      			String[] attributes = line.split(",", -1);
       			User newUser = new User(
       					attributes[0], 
       					attributes[1],
       					attributes[2], 
       					attributes[3], 
       					attributes[4], 
-      					attributes[5]);	// removed one attribute because username is already based on the first name
+      					attributes[5]);	
       				
       			userList.add(newUser);
       			line = reader.readLine();	
-      	} 
+      		} 
       		reader.close();
-      	}catch (IOException e) {
-      		// TODO Auto-generated catch block
+      	} catch (IOException e) {
       		e.printStackTrace();
-      		return ;
+      		return;
       	}
 	}
 	
-	// saves users by reading
+	// load planned courses from file
+	private void loadPlannedCourses() {
+		BufferedReader reader = null;
+		try {
+			// create file if it doesn't exist
+			if (!Files.exists(PLANNED_COURSES_PATH)) {
+				Files.createFile(PLANNED_COURSES_PATH);
+				return;
+			}
+			
+			reader = Files.newBufferedReader(PLANNED_COURSES_PATH);
+			String line = reader.readLine();
+			
+			while (line != null) {
+				// username,courseCode,sectionCode
+				String[] parts = line.split(",");
+				if (parts.length == 3) {
+					String username = parts[0];
+					String courseCode = parts[1];
+					String sectionCode = parts[2];
+					
+					// find the user
+					User user = findUserByUsername(username);
+					if (user != null) {
+						// find the section
+						Section section = findSection(courseCode, sectionCode);
+						if (section != null) {
+							user.planSection(section);
+						}
+					}
+				}
+				line = reader.readLine();
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// save planned courses to file
+	public void savePlannedCourses() {
+		BufferedWriter writer = null;
+		try {
+			writer = Files.newBufferedWriter(PLANNED_COURSES_PATH);
+			
+			for (User user : userList) {
+				for (Section section : user.getPlannedCourses()) {
+					String line = String.join(",",
+							user.getUsername(),
+							section.getCourseCode(),
+							section.getSectionCode()
+					);
+					writer.write(line);
+					writer.newLine();
+				}
+			}
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// helper method to find user by username
+	private User findUserByUsername(String username) {
+		for (User user : userList) {
+			if (user.getUsername().equals(username)) {
+				return user;
+			}
+		}
+		return null;
+	}
+	
 	private void saveUsers() {
 		BufferedWriter writer = null;
-	 	
 	 	try {
 	 		writer = Files.newBufferedWriter(USER_PATH);
 	 		
 	 		for(User user : userList) {
-	 			String middle = user.getMiddleName() == null ? "" : user.getMiddleName(); // create the instance of a middle name even if not present to be empty
+	 			String middle = user.getMiddleName() == null ? "" : user.getMiddleName();
 	 			String line = String.join(",",
 	 					user.getEmailAddress(),
 	 					user.getFirstName(),
@@ -227,14 +279,12 @@ public class DataAccess {
 	 					user.getLastName(),
 	 					user.getUserType(),
 	 					user.getPassword()
-	 					);
+	 			);
 	 				
 	 			writer.write(line);
 	 			writer.newLine();
 	 		}
-	 			
 	 		writer.close();
-	 			
 	 	} catch (IOException e) {
 	 		e.printStackTrace();
 	 	}
@@ -282,7 +332,6 @@ public class DataAccess {
                 }
             }
         }
-        System.out.println(courseCode + sectionCode + "Was not found!");
         return null;
     }
 }
