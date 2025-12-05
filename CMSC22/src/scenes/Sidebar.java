@@ -158,6 +158,8 @@ public class Sidebar {
     
     private void signOut() {
         SceneManager.switchTo("/application/ui/sign_in.fxml");
+        SceneManager.getStage().setWidth(900);
+        SceneManager.getStage().setHeight(600);
     }
     
     public VBox getSidebar() {
