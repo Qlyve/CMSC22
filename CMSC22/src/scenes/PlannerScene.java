@@ -176,6 +176,7 @@ public class PlannerScene extends BaseScene {
                 if (refreshDropdownsReference != null) {
                     refreshDropdownsReference.run(); 
                 }
+                SceneManager.getDataAccess().savePlannedCourses();
             });
             
             row.getChildren().addAll(info, removeBtn);
@@ -361,7 +362,8 @@ public class PlannerScene extends BaseScene {
                                 // update schedule list and plannedlist
                                 schedule.setUser(currentUser);
                                 this.run(); 
-                                onListUpdate.run(); 
+                                onListUpdate.run();
+                                SceneManager.getDataAccess().savePlannedCourses();
                             });
                         } else if (isCoursePlanned) {
                             // if the course is planned, cannot add another 
@@ -385,6 +387,7 @@ public class PlannerScene extends BaseScene {
                                     schedule.setUser(currentUser);
                                     this.run(); 
                                     onListUpdate.run(); 
+                                    SceneManager.getDataAccess().savePlannedCourses();
                                 }
                             });
                         }
