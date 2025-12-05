@@ -47,7 +47,8 @@ public class CourseCatalogScene extends BaseScene {
         	masterList.addAll(list);
         }
         
-        SceneManager.getDataAccess().viewCourses();
+        // for debugging
+        // SceneManager.getDataAccess().viewCourses();
         
         // main container
     	HBox mainContainer = new HBox();
@@ -235,6 +236,4 @@ public class CourseCatalogScene extends BaseScene {
         
         return mainContainer;
     }
-    
-    // METHODS AND FUNCTIONS
 }
