@@ -33,32 +33,32 @@
                         <Label style="-fx-font-size: 26px; -fx-font-weight: bold;" text="SIGN UP" />
                         <Label style="-fx-text-fill: #555;" text="Create a new account" />
 
-                        <Label text="EMAIL:" />
+                        <Label style="-fx-font-weight: bold;" text="EMAIL:" />
                         <TextField fx:id="emailField" prefWidth="300" />
                         <Label fx:id="emailError" textFill="red" text="*Please enter your Email Address" visible="false" managed="false"/>
 
-                        <Label text="FIRST NAME:" />
+                        <Label style="-fx-font-weight: bold;" text="FIRST NAME:" />
                         <TextField fx:id="firstNameField" prefWidth="300" />
                         <Label fx:id="firstNameError" textFill="red" text="*Please enter your First Name" visible="false" managed="false"/>
 
-                        <Label text="MIDDLE NAME:" />
+                        <Label style="-fx-font-weight: bold;" text="MIDDLE NAME:" />
                         <TextField fx:id="middleNameField" prefWidth="300" />
                         <Label fx:id="middleNameError" textFill="red" text="*Please enter your Middle Name" visible="false" managed="false"/>
 
-                        <Label text="LAST NAME:" />
+                        <Label style="-fx-font-weight: bold;" text="LAST NAME:" />
                         <TextField fx:id="lastNameField" prefWidth="300" />
                         <Label fx:id="lastNameError" textFill="red" text="*Please enter your Last Name" visible="false" managed="false"/>
 
-                        <Label text="CATEGORY:" />
+                        <Label style="-fx-font-weight: bold;" text="CATEGORY:" />
                         <ComboBox fx:id="categoryCombo" prefWidth="Infinity" promptText="..." />
                         <Label fx:id="categoryError" textFill="red" text="*Please select a category" visible="false" managed="false"/>
 
-                        <Label text="PASSWORD:" />
+                        <Label style="-fx-font-weight: bold;" text="PASSWORD:" />
                         <PasswordField fx:id="passwordField" prefWidth="300" />
                         <TextField fx:id="passwordVisibleField" prefWidth="300" visible="false" managed="false" />
                         <Label fx:id="passwordError" textFill="red" text="*Please enter your password" visible="false" managed="false"/>
 
-                        <Label text="CONFIRM PASSWORD:" />
+                        <Label style="-fx-font-weight: bold;" text="CONFIRM PASSWORD:" />
                         <PasswordField fx:id="confirmPasswordField" prefWidth="300" />
                         <TextField fx:id="confirmPasswordVisibleField" prefWidth="300" visible="false" managed="false" />
                         <Label fx:id="confirmPasswordError" textFill="red" text="*Please enter your password" visible="false" managed="false"/>
